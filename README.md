@@ -1,2 +1,3 @@
-# mazes-for-programmers
+# Mazes for Programmers
+
 Generate Mazes with Programming
