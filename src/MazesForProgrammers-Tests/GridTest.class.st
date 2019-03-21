@@ -22,7 +22,23 @@ GridTest >> testEachCell [
 ]
 
 { #category : #tests }
-GridTest >> testOfBy [
+GridTest >> testOfByRectangularGrid [
+	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
+	numberOfRows := 3.
+	numberOfColumns := 5.
+	grid := Grid of: numberOfRows by: numberOfColumns.
+	
+	correctNumberOfRows := grid grid size = numberOfRows.
+	correctNumberOfColumns := grid eachRow allSatisfy: [ :row | row size = numberOfColumns ].
+	totalCells := grid eachCell size.
+	
+	self assert: totalCells equals: 15. 
+	self assert: correctNumberOfRows.
+	self assert: correctNumberOfColumns
+]
+
+{ #category : #tests }
+GridTest >> testOfBySquareGrid [
 	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
 	numberOfRows := 4.
 	numberOfColumns := 4.

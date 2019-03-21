@@ -29,11 +29,6 @@ grid eachCell.
 - totalRows, totalColumns: The total number of rows and columns in this Grid.
 - grid: A two dimensional array of Cells.
 
-## TODO:
-
-Currently Grid can only handle perfect squares of cells. Where the number of rows vs. columns are
-different a bug will occur.
-
 ## Reference
 
 Mazes for Programmers, Jamis Buck, page 53.
@@ -93,8 +88,8 @@ Grid >> eachRow [
 { #category : #'initialization - private' }
 Grid >> fillColumn [
 	| column |
-	column := Array ofSize: totalRows.
-	1 to: totalRows do: [ :index | column at: index put: Cell new ].
+	column := Array ofSize: totalColumns.
+	1 to: totalColumns do: [ :index | column at: index put: Cell new ].
 	
 	^ column 
 ]
@@ -113,8 +108,8 @@ Grid >> initializeCellCoordinates [
 
 { #category : #'initialization - private' }
 Grid >> initializeGrid [
-	grid := Array ofSize: totalColumns.
-	1 to: totalColumns do: [ :row | grid at: row put: self fillColumn ]
+	grid := Array ofSize: totalRows.
+	1 to: totalRows do: [ :row | grid at: row put: self fillColumn ]
 ]
 
 { #category : #accessing }
