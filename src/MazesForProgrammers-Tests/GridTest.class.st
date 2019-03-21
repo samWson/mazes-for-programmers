@@ -10,16 +10,29 @@ Class {
 }
 
 { #category : #tests }
-GridTest >> testInitializeGrid [
-	"This appears correct but is still a failing test."
-	| grid row expected actual |
-	grid := Grid new totalRows: 3 totalColumns: 3.		
-	row := grid fillColumn.
-	expected := { row copy. row copy. row copy. }.
+GridTest >> testEachCell [
+	| grid actual allAreCells |
+	grid := Grid of: 2 by: 2.
+	
+	actual := grid eachCell.
+	allAreCells := actual allSatisfy: [ :each | each class = Cell ].
+	
+	self assert: actual size equals: 4.
+	self assert: allAreCells 
+]
 
-	grid initializeGrid.
+{ #category : #tests }
+GridTest >> testOfBy [
+	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
+	numberOfRows := 4.
+	numberOfColumns := 4.
+	grid := Grid of: numberOfRows by: numberOfColumns.
 	
-	actual := grid grid.
+	correctNumberOfRows := grid grid size = numberOfRows.
+	correctNumberOfColumns := grid eachRow allSatisfy: [ :row | row size = numberOfColumns ].
+	totalCells := grid eachCell size.
 	
-	self assert: actual equals: expected
+	self assert: totalCells equals: 16. 
+	self assert: correctNumberOfRows.
+	self assert: correctNumberOfColumns 
 ]

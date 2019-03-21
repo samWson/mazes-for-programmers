@@ -17,13 +17,11 @@ This should be used instead of `new` as the `initializeGrid` method will use the
 Grid of: 4 by: 4 
 ```
 
-The **contents** protocol contains methods that return individual rows or cells of the grid.
-The **enumeration** protocol contains methods for iterating over each row or cell.
+The **contents** protocol contains the `eachCell` method which return individual cells of the grid
+as a collection.
 
 ```
-grid eachCell.
-
-grid eachCell: [ :cell | Transcript show: cell ]
+grid eachCell. 
 ```
 
 ## Instance Variables
@@ -31,9 +29,14 @@ grid eachCell: [ :cell | Transcript show: cell ]
 - totalRows, totalColumns: The total number of rows and columns in this Grid.
 - grid: A two dimensional array of Cells.
 
+## TODO:
+
+Currently Grid can only handle perfect squares of cells. Where the number of rows vs. columns are
+different a bug will occur.
+
 ## Reference
 
-Mazes for Programmers, Jamis Buck, page 68.
+Mazes for Programmers, Jamis Buck, page 53.
 "
 Class {
 	#name : #Grid,
@@ -50,6 +53,7 @@ Class {
 Grid class >> of: totalRows by: totalColumns [
 	^ self new totalRows: totalRows totalColumns: totalColumns;
 		initializeGrid;
+		initializeCellCoordinates; 
 		configureCells;
 		yourself
 ]
@@ -64,7 +68,7 @@ Grid >> at: rowCoordinate at: columnCoordinate [
 { #category : #'initialization - private' }
 Grid >> configureCells [
 	| rowCoordinate columnCoordinate |
-	self eachCell: [ :cell |
+	self eachCell do: [ :cell |
 		rowCoordinate := cell row.
 		columnCoordinate := cell column.
 		cell 
@@ -72,29 +76,18 @@ Grid >> configureCells [
 			south: (self at: rowCoordinate + 1 at: columnCoordinate);
 			west: (self at: rowCoordinate at: columnCoordinate - 1);
 			east: (self at: rowCoordinate at: columnCoordinate + 1).
-			].
-		
-	self initializeCellCoordinates 
+			].		
+
 ]
 
 { #category : #contents }
 Grid >> eachCell [ 
-	^ self eachCell: [ :cell | cell ifNotNil: [ cell ] ] 
-]
-
-{ #category : #enumeration }
-Grid >> eachCell: aBlock [
-	^ self eachRow flatCollect: aBlock
+	^ self eachRow flatCollect: [ :cell | cell ifNotNil: [ cell ] ] 
 ]
 
 { #category : #contents }
 Grid >> eachRow [
-	^ self eachRow: [ :row | row ]
-]
-
-{ #category : #enumeration }
-Grid >> eachRow: aBlock [
-	^ grid do: aBlock
+	^ self grid do: [ :row | row ]
 ]
 
 { #category : #'initialization - private' }

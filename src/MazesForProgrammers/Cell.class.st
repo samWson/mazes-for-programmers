@@ -42,7 +42,7 @@ Consider initializing Cell with a Point instance for row and column coordinates.
 
 ## Reference
 
-Mazes for Programmers, Jamis Buck, page 65.
+Mazes for Programmers, Jamis Buck, page 50.
 "
 Class {
 	#name : #Cell,
