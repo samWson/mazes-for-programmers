@@ -30,10 +30,21 @@ Class {
 }
 
 { #category : #examples }
-MPBinaryTree class >> maze [
+MPBinaryTree class >> defaultMaze [
 	| grid |
 	grid := Grid of: 4 by: 4.
-	^ self on: grid 
+	self on: grid.
+	grid displayStringOn: Transcript.
+	Transcript flush
+]
+
+{ #category : #'instance creation' }
+MPBinaryTree class >> mazeOf: totalRows by: totalColumns [
+	| grid |
+	grid := Grid of: totalRows by: totalColumns.
+	self on: grid.
+	grid displayStringOn: Transcript.
+	Transcript flush
 ]
 
 { #category : #'instance creation' }

@@ -24,10 +24,27 @@ as a collection.
 grid eachCell. 
 ```
 
+### Printing
+
+I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
+streamed. I have a number of helper methods on my class side in the `streaming - helpers` protocol
+that are used to make up the individual components of my grid in string form. 
+
+```
+grid displayStringOn: Transcript. ""Or any other stream object.""
+```
+
 ## Instance Variables
 
 - totalRows, totalColumns: The total number of rows and columns in this Grid.
 - grid: A two dimensional array of Cells.
+
+## TODO
+
+- Nil cells might be possible according to the book. Instead of doing nil checks on cells
+	normalize the grid before hand.
+- Make a baseline for the package
+- Customize the inspector to display the grid.
 
 ## Reference
 
@@ -41,8 +58,80 @@ Class {
 		'totalRows',
 		'totalColumns'
 	],
+	#classVars : [
+		'CellBody',
+		'CellCorner',
+		'HorizontalCellBoundary',
+		'LinkedHorizontalCellBoundary',
+		'LinkedVerticalCellBoundary',
+		'UnlinkedHorizontalCellBoundary',
+		'UnlinkedVerticalCellBoundary'
+	],
 	#category : #MazesForProgrammers
 }
+
+{ #category : #constants }
+Grid class >> cellBody [
+	^ CellBody 
+]
+
+{ #category : #'streaming - helpers' }
+Grid class >> cellBottomOn: aWriteStream for: aCell [
+	
+	| southCellBoundary |
+	southCellBoundary := aCell 
+		ifNil: [ self unlinkedHorizontalCellBoundary ]
+		ifNotNil: [ (aCell linked: aCell south) ifTrue: [ self linkedHorizontalCellBoundary ] ifFalse: [ self unlinkedHorizontalCellBoundary ] ].
+		
+	aWriteStream
+		<< southCellBoundary;
+		<< self cellCorner.
+]
+
+{ #category : #constants }
+Grid class >> cellCorner [
+	^ CellCorner 
+]
+
+{ #category : #'streaming - helpers' }
+Grid class >> cellTopOn: aWriteStream for: aCell [ 
+	| eastCellBoundry |
+	eastCellBoundry := aCell
+		ifNil: [ self unlinkedVerticalCellBoundary ]
+		ifNotNil: [ (aCell linked: aCell east) ifTrue: [ self linkedVerticalCellBoundary ] ifFalse: [ self unlinkedVerticalCellBoundary ] ].
+	
+	aWriteStream
+		<< self cellBody;
+		<< eastCellBoundry.
+]
+
+{ #category : #constants }
+Grid class >> horizontalCellBoundary [
+	^ HorizontalCellBoundary 
+]
+
+{ #category : #'class initialization' }
+Grid class >> initialize [
+	CellBody := Character space asString repeat: 3.
+	CellCorner := '+'.
+	HorizontalCellBoundary := '---+'. "TODO: this is kind of redundent thanks to the other constants."
+	LinkedVerticalCellBoundary := Character space asString.
+	UnlinkedVerticalCellBoundary := '|'.
+	UnlinkedHorizontalCellBoundary := '---'.
+	LinkedHorizontalCellBoundary := Character space asString repeat: 3
+	
+	
+]
+
+{ #category : #constants }
+Grid class >> linkedHorizontalCellBoundary [
+	^ LinkedHorizontalCellBoundary 
+]
+
+{ #category : #constants }
+Grid class >> linkedVerticalCellBoundary [
+	^ LinkedVerticalCellBoundary 
+]
 
 { #category : #'instance creation' }
 Grid class >> of: totalRows by: totalColumns [
@@ -51,6 +140,24 @@ Grid class >> of: totalRows by: totalColumns [
 		initializeCellCoordinates; 
 		configureCells;
 		yourself
+]
+
+{ #category : #'streaming - helpers' }
+Grid class >> topBoundaryOn: aWriteStream length: totalColumns [
+	aWriteStream
+		nextPutAll: self cellCorner;
+		nextPutAll: (self horizontalCellBoundary repeat: totalColumns);
+		cr.
+]
+
+{ #category : #constants }
+Grid class >> unlinkedHorizontalCellBoundary [
+	^ UnlinkedHorizontalCellBoundary
+]
+
+{ #category : #constants }
+Grid class >> unlinkedVerticalCellBoundary [
+	^ UnlinkedVerticalCellBoundary 
 ]
 
 { #category : #accessing }
@@ -73,6 +180,36 @@ Grid >> configureCells [
 			east: (self at: rowCoordinate at: columnCoordinate + 1).
 			].		
 
+]
+
+{ #category : #displaying }
+Grid >> displayStringOn: aStream [
+	| outputStream |
+	outputStream := String new writeStream.
+	self class topBoundaryOn: outputStream length: totalColumns.
+	
+	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
+		topHalfStream := String new writeStream.
+		bottomHalfStream := String new writeStream.
+		topHalf := '|'.
+		bottomHalf := '+'.
+		topHalfStream << topHalf.
+		bottomHalfStream << bottomHalf.
+
+		row do: [ :cell |
+			self class cellTopOn: topHalfStream for: cell.
+			self class cellBottomOn: bottomHalfStream for: cell. 
+			].
+
+		topHalfStream cr.
+		bottomHalfStream cr.
+		
+		outputStream 
+			<< topHalfStream contents;
+			<< bottomHalfStream contents.
+		 ].
+	
+	outputStream contents displayStringOn: aStream
 ]
 
 { #category : #contents }
