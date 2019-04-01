@@ -10,13 +10,13 @@ maze.
 
 ## Usage
 
-My API consists only of class methods. `maze` returns a maze with a 4 x 4 grid.
-A different sized maze can be created by using the `on:` method with a Grid instance.
+My API consists only of class methods. `defaultMaze` returns a maze with a 4 x 4 grid.
+A different sized maze can be created by using the `mazeOf:by:` method.
 
 ```
-MPBinaryTree maze.
+MPBinaryTree defaultMaze.
 
-MPBinaryTree on: (Grid of: 6 by: 6)
+MPBinaryTree mazeOf: 6 by: 6
 ```
 
 ## Reference
@@ -31,11 +31,7 @@ Class {
 
 { #category : #examples }
 MPBinaryTree class >> defaultMaze [
-	| grid |
-	grid := Grid of: 4 by: 4.
-	self on: grid.
-	grid displayStringOn: Transcript.
-	Transcript flush
+	self mazeOf: 4 by: 4
 ]
 
 { #category : #'instance creation' }

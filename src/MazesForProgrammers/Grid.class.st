@@ -43,7 +43,6 @@ grid displayStringOn: Transcript. ""Or any other stream object.""
 
 - Nil cells might be possible according to the book. Instead of doing nil checks on cells
 	normalize the grid before hand.
-- Make a baseline for the package
 - Customize the inspector to display the grid.
 
 ## Reference
