@@ -57,7 +57,7 @@ MPSidewinder class >> on: aGrid [
 			run add: cell.
 			atEasternBoundary := cell east isNil.
 			atNorthernBoundary := cell north isNil.
-			shouldCloseOut := (atEasternBoundary or: (atNorthernBoundary not and: (2 atRandom isZero))).
+			shouldCloseOut := (atEasternBoundary or: (atNorthernBoundary not and: (2 atRandom = 1))).
 			shouldCloseOut 
 				ifTrue: [ 
 					member := run atRandom.
