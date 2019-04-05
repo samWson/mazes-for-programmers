@@ -1,22 +1,14 @@
 "
-# Binary Tree Maze
+# MPBinaryTree
 
 I am a maze implemented with a binary tree algorithm.
 
-## Colaborators
-
-I make use of the Grid and Cell classes to implement the components of a
-maze.
-
 ## Usage
 
-My API consists only of class methods. `maze` returns a maze with a 4 x 4 grid.
-A different sized maze can be created by using the `on:` method with a Grid instance.
+My public API is documented in my superclass MPMazeAlgorithm in the **Usage** section.
 
 ```
-MPBinaryTree maze.
-
-MPBinaryTree on: (Grid of: 6 by: 6)
+MPMazeAlgorithm comment.
 ```
 
 ## Reference
@@ -25,27 +17,9 @@ Mazes for Programmers, Jamis Buck, page 58.
 "
 Class {
 	#name : #MPBinaryTree,
-	#superclass : #Object,
+	#superclass : #MPMazeAlgorithm,
 	#category : #MazesForProgrammers
 }
-
-{ #category : #examples }
-MPBinaryTree class >> defaultMaze [
-	| grid |
-	grid := Grid of: 4 by: 4.
-	self on: grid.
-	grid displayStringOn: Transcript.
-	Transcript flush
-]
-
-{ #category : #'instance creation' }
-MPBinaryTree class >> mazeOf: totalRows by: totalColumns [
-	| grid |
-	grid := Grid of: totalRows by: totalColumns.
-	self on: grid.
-	grid displayStringOn: Transcript.
-	Transcript flush
-]
 
 { #category : #'instance creation' }
 MPBinaryTree class >> on: aGrid [
