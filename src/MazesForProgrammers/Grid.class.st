@@ -113,7 +113,9 @@ Grid class >> horizontalCellBoundary [
 Grid class >> initialize [
 	CellBody := Character space asString repeat: 3.
 	CellCorner := '+'.
-	HorizontalCellBoundary := '---+'. "TODO: this is kind of redundent thanks to the other constants."
+	
+	self flag: #fixme. "HorizontalCellBoundary is kind of redundant thanks to the other constants."
+	HorizontalCellBoundary := '---+'. 
 	LinkedVerticalCellBoundary := Character space asString.
 	UnlinkedVerticalCellBoundary := '|'.
 	UnlinkedHorizontalCellBoundary := '---'.
