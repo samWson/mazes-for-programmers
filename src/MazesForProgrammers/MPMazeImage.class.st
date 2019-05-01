@@ -9,10 +9,22 @@ I create pixel based image files using a raster algorithm. The files will be
 named `maze.png` and will be in the same directory as the IDE image is being 
 run from. New images will overwrite an older image.
 
+### Drawing Implementation
+
+From the start the northern and western maze boundaries are drawn leaving the
+east and south boundaries to be drawn with each cell.
+
+Individual cells are drawn on the form using a raster algorithm for each cell
+along the x and then y axies. Each pixel of the cell is also drawn using a 
+raster along the x and then the y axies. When a cell is being drawn a 
+starting reference position is set and used as the zero point of that cell 
+i.e. the cellZero instance variable. 
+
 ## Colaborators
 
 I make use of the Grid and Cell classes to generate maze images based off of the 
-cell links in a grid.
+cell links in a grid. A Form is used to write the pixels of the image and then
+used as data for a PNGReadWriter to produce the image.
 
 ## Usage
 
@@ -23,9 +35,21 @@ an image from a Grid instance.
 MPMazeImage for: aGrid
 ```
 
-## TODO
+## Instance Variables
 
-Class should be refactored to used an instance of the class and have the Grid and Form as instance variables.
+- form: Image data is written to the form and then used to create the image file.
+- grid: A Grid instance representing the maze to be written.
+- writePointer: A Point instance representing a position on the form. Any writing operations use this position.
+- cellZero: A Point instance uses as a reference for drawing the pixels of a cell.
+- xExtent: An integer representing the maximum x coordinate on the form.
+
+## Constants
+
+- CellBodySize: An integer. The cell body is its white space center. This number is the amount of pixels this white space is for both the x and y axies.
+
+## ToDo
+
+- Use Form>>#colorAt:put: to write colors to pixels instead of Form>>#pixelAt:put:. It's more understandable as to what it does. 
 
 ## Reference
 
@@ -42,9 +66,7 @@ Class {
 		'xExtent'
 	],
 	#classVars : [
-		'CellBodySize',
-		'CellCorner',
-		'HorizontalCellBoundary'
+		'CellBodySize'
 	],
 	#category : #MazesForProgrammers
 }
@@ -53,13 +75,6 @@ Class {
 MPMazeImage class >> cellBodySize [
 
 	^ CellBodySize 
-]
-
-{ #category : #constants }
-MPMazeImage class >> cellCorner [
-	"A single black pixel."
-	
-	^ CellCorner
 ]
 
 { #category : #'image writing - helpers' }
@@ -73,72 +88,33 @@ MPMazeImage class >> extentFrom: totalRows by: totalColumns [
 	^ x@y
 ]
 
-{ #category : #'instance creation api' }
+{ #category : #'public api' }
 MPMazeImage class >> for: aGrid [
 	"Create an image of a maze based off of aGrid."
 
-	"Algorithm:
-	Initialize an instance. /
-		Assign it a Form. /
-			Form must be the right number of pixels for the Grid size. /
-			Form must be grayscale with `0` being white and `1` being black. /
-			This means the `depth` will be 1 bit i.e. supports 2 colors. /
-		Assign it a Grid. /
-	
-	Write top boundary to Form. /
-	Write each row to Form. /
-		Write top half of cell i.e. vertical boundaries and cell body /
-		Write bottom half of cell i.e. horizontal boundaries /
-		
-	Use PNGReadWriter to write an image file called 'maze.png' /
-"
-
-	| extent instance |
-	extent := self extentFrom: aGrid totalRows by: aGrid totalColumns.
-	instance := self new.
-	instance
-		grid: aGrid;
-		form: (Form extent: extent).  
- 
-	instance writeTopBoundary.
+	| instance |
+	instance := self newInstanceFor: aGrid.
+	instance writeNorthBoundary.
 	instance writeWesternBoundary.
 	instance writeCells.
-
-	aGrid eachRow do: [ :row |
-		instance writeRowBody: row.
-		 ].
-	self flag: #fixme. "Almost there but not quite. If all the cells are unlinked then this should be a perfect grid. Set a break point and step through each writing of a cell. In the inspector the form can be written as a PNG to see the output as it is built."
 	PNGReadWriter putForm: instance form onFileNamed: 'maze.png'
-]
-
-{ #category : #constants }
-MPMazeImage class >> horizontalCellBoundary [ 
-	"From left to right: three black pixels and one corner pixel"
-
-	^ HorizontalCellBoundary 
 ]
 
 { #category : #'class initialization' }
 MPMazeImage class >> initialize [ 
 
-	self flag: #todo. "Document the implementation of constants in class comment."
-	CellCorner := #(0). "A single black pixel"
-	HorizontalCellBoundary := #(0 0 0 0). "Three black pixels and one corner pixel"
 	CellBodySize := 3. "3 pixels wide or high."
 ]
 
-{ #category : #'image writing - helpers' }
-MPMazeImage class >> rowBodyOn: aForm grid: aGrid [
-	"Write the body of a row, from left to right using a raster algorithm."
-	
-	
-]
+{ #category : #'instance creation' }
+MPMazeImage class >> newInstanceFor: aGrid [
 
-{ #category : #'image writing - helpers' }
-MPMazeImage class >> rowBodyOn: aForm grid: aGrid yCoordinate: anInteger [
-	"Write the body of a row at y coordinate on aForm, from left to right using a raster algorithm."
-	
-	
+	| extent |
+	extent := self extentFrom: aGrid totalRows by: aGrid totalColumns.
+	^ self new 
+		grid: aGrid;
+		form: (Form extent: extent)
+
 ]
 
 { #category : #'image writing - helpers' }
@@ -152,10 +128,9 @@ MPMazeImage class >> totalBoundaries: anInteger [
 MPMazeImage >> advanceCellZero [
 	"Advance to the zero by zero starting point of the next cell. If the x coordinate exceeds the bounds of the Form then return to x = 1 and advance one position along the y axis."
 	
-	| cellBodySize pixelSize positionOffset nextPosition |
-	cellBodySize := 3.
+	| pixelSize positionOffset nextPosition |
 	pixelSize := 1.
-	positionOffset := cellBodySize + pixelSize.
+	positionOffset := self cellBodySize + pixelSize.
 	nextPosition := cellZero x + positionOffset.
 	cellZero := (nextPosition >= xExtent)
 		ifTrue:  [ 1 @ (cellZero y + positionOffset) ]
@@ -180,12 +155,16 @@ MPMazeImage >> advancePointerToNextCellRow [
 
 { #category : #testing }
 MPMazeImage >> atXExtent [
-	"Answer weather the writePointer is at or beyond the extent of x coordinates."
-	
-	| xExtent |
-	xExtent := form extent x - 1.
+	"Answer whether the writePointer is at or beyond the extent of x coordinates."
+
 	^ (writePointer x >= xExtent)
 	
+]
+
+{ #category : #constants }
+MPMazeImage >> cellBodySize [
+	
+	^ self class cellBodySize
 ]
 
 { #category : #accessing }
@@ -209,6 +188,7 @@ MPMazeImage >> form: aForm [
 
 { #category : #accessing }
 MPMazeImage >> grid: aGrid [
+
 	grid := aGrid
 ]
 
@@ -230,77 +210,37 @@ MPMazeImage >> writeCell: aCell [
 	"Write the pixels of a cell using a raster algorithm."
 
 	writePointer := cellZero copy.
-	self flag: #fixme. "Possible bug. The below expression needs to be run for the number equivalent to the cell body size."
-	self class cellBodySize timesRepeat: [ self writeCellBody: aCell. ].
+	self cellBodySize timesRepeat: [ 
+		self writeCellRow: aCell.
+		self advancePointerToNextCellRow. 
+		].
 	self writeCellSouthBoundary: aCell.
-	self advanceCellZero 
-	
-	"
-	def setPointerToCellZero
-		pointer = cellZero
-	
-	def writeCellBody
-		cellBodySize timesRepeat:
-			advancePointer
-			
-		if cellIsLinked
-			advancePointerToNextRow
-		else
-			writePixel
-			advancePointerToNextRow
-	
-	def writeCellBoundary
-		if cellIsLinked
-			cellBodySize timesRepeat:
-				advancePointer
-		else
-			cellBodySize timesRepeat:
-				writePixel
-				advancePointer
-				
-		writePixel
-		advancePointer
-	
-	def advanceCellZero
-		"
+	self advanceCellZero
 ]
 
 { #category : #'form-actions' }
-MPMazeImage >> writeCellBody: aCell [
-	"The body of a cell is its center whitespace and eastern boundary."
+MPMazeImage >> writeCellRow: aCell [
+	"A cell row is the whitespace of the center of the cell and a part of the cels eastern boundary."
 
-	self class cellBodySize timesRepeat: [ self advancePointer ].
-	
+	self cellBodySize timesRepeat: [ self advancePointer ].
+
 	aCell
 		ifNil: [ self writePixel ]
-		ifNotNil: [ (aCell linked: aCell east)
-				ifFalse: [ self writePixel ] ].
-	
-	self flag: #fixme. "Leave advancing the pointer to be sent outside this method i.e. in a block during the same iteration."
-	self advancePointerToNextCellRow
-
-	"
-	def writeCellBody
-		cellBodySize timesRepeat:
-			advancePointer
-			
-		if cellIsLinked
-			advancePointerToNextRow
-		else
-			writePixel
-			advancePointerToNextRow
-"
+		ifNotNil: [ 
+			(aCell linked: aCell east)
+				ifFalse: [ self writePixel ] 
+				]
 ]
 
 { #category : #'form-actions' }
 MPMazeImage >> writeCellSouthBoundary: aCell [
 	"A boundary is made of white pixels if the cell is linked to its southern neighbour and black pixels if is not."
-	self flag: #fixme. "Possible bug. It is leaving white pixels for an unlinked cell boundary i.e. it should be black."
-	writePointer := (cellZero x) @ (cellZero y + self class cellBodySize).
+
+	writePointer := (cellZero x) @ (cellZero y + self cellBodySize).
 	
 	aCell
 		ifNil: [ 
-			self class cellBodySize + 1 timesRepeat: [ 
+			self cellBodySize + 1 timesRepeat: [ 
 				self writePixel. 
 				self advancePointer. 
 				] 
@@ -308,38 +248,37 @@ MPMazeImage >> writeCellSouthBoundary: aCell [
 		ifNotNil: [ 
 			(aCell linked: aCell south) 
 				ifTrue: [ 
-					self class cellBodySize timesRepeat: [ 
+					self cellBodySize timesRepeat: [ 
 						self advancePointer.
 						 ].
 					 ] 
 				ifFalse: [
-					self class cellBodySize timesRepeat: [ 
+					self cellBodySize timesRepeat: [ 
 						self writePixel.
 						self advancePointer.
 						 ].
 					 ].
-				].			
-			self writePixel.  
-	"
-	setPointerToSouthernBoundaryOffset
-	
-	if cellLinked
-		advance 3 points
-		write 1 pixel
-	else
-		write 4 pixels
-	" 
+				].
+
+			self writePixel
 ]
 
 { #category : #'form-actions' }
 MPMazeImage >> writeCells [
-	"Write each cell in turn using a raster algorithm."
 
 		grid eachRow do: [ :row |
 			row do: [ :cell |
 				self writeCell: cell.
 				 ].
 		 ]
+]
+
+{ #category : #'form-actions' }
+MPMazeImage >> writeNorthBoundary [
+
+	| zeroIndexedExtent |
+	zeroIndexedExtent := xExtent - 1.
+	0 to: zeroIndexedExtent do: [ :coordinate | form pixelValueAt: coordinate@0 put: 1 ]
 ]
 
 { #category : #'form-actions' }
@@ -350,27 +289,7 @@ MPMazeImage >> writePixel [
 ]
 
 { #category : #'form-actions' }
-MPMazeImage >> writeRowBody: aCollection [
-	"Write the body of a row at y coordinate on form, from left to right using a raster algorithm."
-	self flag: #fixme. "method name is incorrect. The entire row is written in the folowing methods not just the body."
-	
-	aCollection do: [ :cell | self writeCell: cell ]
-	
-	
-]
-
-{ #category : #'form-actions' }
-MPMazeImage >> writeTopBoundary [
-	"Draw a boundary of black pixels on aForm."
-	
-	| xExtent |
-	xExtent := form extent x - 1.
-	0 to: xExtent do: [ :coordinate | form pixelValueAt: coordinate@0 put: 1 ]
-]
-
-{ #category : #'form-actions' }
 MPMazeImage >> writeWesternBoundary [
-	"Write a line of black pixels for the full extent of the western boundary."
 
 	| yExtent |
 	yExtent := form extent y - 1.
