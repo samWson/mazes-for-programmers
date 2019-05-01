@@ -47,10 +47,6 @@ MPMazeImage for: aGrid
 
 - CellBodySize: An integer. The cell body is its white space center. This number is the amount of pixels this white space is for both the x and y axies.
 
-## ToDo
-
-- Use Form>>#colorAt:put: to write colors to pixels instead of Form>>#pixelAt:put:. It's more understandable as to what it does. 
-
 ## Reference
 
 Mazes for Programmers, Jamis Buck.
@@ -278,14 +274,13 @@ MPMazeImage >> writeNorthBoundary [
 
 	| zeroIndexedExtent |
 	zeroIndexedExtent := xExtent - 1.
-	0 to: zeroIndexedExtent do: [ :coordinate | form pixelValueAt: coordinate@0 put: 1 ]
+	0 to: zeroIndexedExtent do: [ :coordinate | form colorAt: coordinate@0 put: Color black. ]
 ]
 
 { #category : #'form-actions' }
 MPMazeImage >> writePixel [
-	"Set the pixel color to black."
 
-	^ form pixelValueAt: writePointer put: 1
+	^ form colorAt: writePointer put: Color black
 ]
 
 { #category : #'form-actions' }
@@ -293,5 +288,5 @@ MPMazeImage >> writeWesternBoundary [
 
 	| yExtent |
 	yExtent := form extent y - 1.
-	0 to: yExtent do: [ :coordinate | form pixelValueAt: 0@coordinate put: 1 ]
+	0 to: yExtent do: [ :coordinate | form colorAt: 0@coordinate put: Color black. ]
 ]
