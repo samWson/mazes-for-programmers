@@ -153,10 +153,9 @@ Grid class >> horizontalCellBoundary [
 
 { #category : #'class initialization' }
 Grid class >> initialize [
+
 	CellBody := Character space asString repeat: 3.
 	CellCorner := '+'.
-	
-	self flag: #fixme. "HorizontalCellBoundary is kind of redundant thanks to the other constants."
 	HorizontalCellBoundary := '---+'. 
 	LinkedVerticalCellBoundary := Character space asString.
 	UnlinkedVerticalCellBoundary := '|'.
@@ -204,7 +203,7 @@ Grid class >> unlinkedVerticalCellBoundary [
 	^ UnlinkedVerticalCellBoundary 
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - private' }
 Grid >> at: rowCoordinate at: columnCoordinate [
 	(rowCoordinate between: 1 and: totalRows) ifFalse: [ ^ nil ].
 	(columnCoordinate between: 1 and: ((grid at: rowCoordinate) size)) ifFalse: [ ^ nil ].
@@ -360,16 +359,6 @@ Grid >> northNeighbourOf: aPoint [
 	northNeighbour := (aPoint x) @ (aPoint y + 1).
 	self signalIfOutOfBounds: northNeighbour.
 	^ northNeighbour
-]
-
-{ #category : #accessing }
-Grid >> randomCell [
-	| row column random |
-	random := Random new.
-	row := random nextInt: totalRows.
-	column := random nextInt: ((grid at: row) size).
-	
-	^ (grid at: row) at: column 
 ]
 
 { #category : #signaling }

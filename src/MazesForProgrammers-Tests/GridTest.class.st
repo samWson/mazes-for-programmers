@@ -228,7 +228,18 @@ GridTest >> testOfBySquareGrid [
 ]
 
 { #category : #tests }
-GridTest >> testSignalIfOutOfBounds [
+GridTest >> testSignalIfOutOfBoundsNoException [
+	
+	| inBoundsCoordinate |
+	inBoundsCoordinate := 2@2.
+
+	self
+		shouldnt: [ grid4x4 signalIfOutOfBounds: inBoundsCoordinate ]
+		raise: OutOfGridBounds
+]
+
+{ #category : #tests }
+GridTest >> testSignalIfOutOfBoundsSignalException [
 	
 	| outOfMaxBounds outOfMinBounds |
 	outOfMaxBounds := 4@4.
@@ -240,17 +251,6 @@ GridTest >> testSignalIfOutOfBounds [
 		
 	self 
 		should: [ grid4x4 signalIfOutOfBounds: outOfMinBounds ]
-		raise: OutOfGridBounds
-]
-
-{ #category : #tests }
-GridTest >> testSignalIfOutOfBoundsWithValid [
-	
-	| inBoundsCoordinate |
-	inBoundsCoordinate := 2@2.
-
-	self
-		shouldnt: [ grid4x4 signalIfOutOfBounds: inBoundsCoordinate ]
 		raise: OutOfGridBounds
 ]
 
