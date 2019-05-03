@@ -39,5 +39,7 @@ MPBinaryTree class >> applyTo: aGrid [
 			aGrid link: coordinate to: neighbour.
 			].
 		].
-	]
+	].
+
+	^ aGrid
 ]

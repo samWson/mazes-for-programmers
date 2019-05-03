@@ -52,6 +52,18 @@ grid link: 2@2 to: 2@3.
 grid liked: 2@2 to: 2@3. ""true""
 ```
 
+### Boundaries
+
+Boolean methods are available for testing if a coordinate is adjacen to a boundary.
+
+```
+grid atEastBoundary: 3@3.
+```
+
+```
+grid atNorthBoundary: 3@3.
+```
+
 ### Printing
 
 I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
@@ -204,6 +216,18 @@ Grid >> atCoordinates: aPoint [
 	
 	self signalIfOutOfBounds: aPoint.
 	^ self at: (aPoint x + 1) at: (aPoint y + 1)
+]
+
+{ #category : #testing }
+Grid >> atEastBoundary: aPoint [ 
+	
+	^ (aPoint x) = (extent x)
+]
+
+{ #category : #testing }
+Grid >> atNorthBoundary: aPoint [ 
+	
+	^ (aPoint y) = (extent y)
 ]
 
 { #category : #'initialization - private' }

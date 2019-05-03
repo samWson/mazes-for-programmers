@@ -24,23 +24,32 @@ Class {
 { #category : #'instance creation' }
 MPSidewinder class >> applyTo: aGrid [
 	
-	aGrid eachRow do: [ :row | | run |
+	| extent |
+	extent := aGrid extent.
+	0 to: extent y do: [ :y | | run | "Do each row."
 		run := LinkedList new.
-		row do: [ :cell | | atEasternBoundary atNorthernBoundary shouldCloseOut member |
-			run add: cell.
-			atEasternBoundary := cell east isNil.
-			atNorthernBoundary := cell north isNil.
-			shouldCloseOut := (atEasternBoundary or: (atNorthernBoundary not and: (2 atRandom = 1))).
-			shouldCloseOut 
-				ifTrue: [ 
+		
+		0 to: extent x do: [ :x | | coordinate atEastBoundary atNorthBoundary shouldCloseRun | "Each cell."
+			coordinate := x@y.
+			run add: coordinate.
+			atEastBoundary := aGrid atEastBoundary: coordinate.
+			atNorthBoundary := aGrid atNorthBoundary: coordinate.
+			shouldCloseRun := (atEastBoundary or: (atNorthBoundary not and: (2 atRandom = 1))).			
+			shouldCloseRun
+				ifTrue: [ | member neighbour |
 					member := run atRandom.
-					member north ifNotNil: [ member link: member north ].
+					(atEastBoundary and: atNorthBoundary)
+						ifFalse: [
+							neighbour := aGrid northNeighbourOf: member.
+							neighbour ifNotNil: [ aGrid link: member to: neighbour ].
+							].
 					run removeAll.
-					 ] 
+					]
 				ifFalse: [ 
-					cell link: cell east 
+					aGrid link: coordinate to: (aGrid eastNeighbourOf: coordinate)
 					].
-			]. 		
-		 ].
+			].
+		].
+
 	^ aGrid
 ]

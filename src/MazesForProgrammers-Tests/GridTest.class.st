@@ -27,6 +27,46 @@ GridTest >> setUp [
 ]
 
 { #category : #tests }
+GridTest >> testAtEastBoundaryFalse [
+
+	| coordinate actual |
+	coordinate := 2@0.
+	actual := grid4x4 atEastBoundary: coordinate.
+	
+	self deny: actual
+]
+
+{ #category : #tests }
+GridTest >> testAtEastBoundaryTrue [
+
+	| coordinate actual |
+	coordinate := 3@0.
+	actual := grid4x4 atEastBoundary: coordinate.
+	
+	self assert: actual
+]
+
+{ #category : #tests }
+GridTest >> testAtNorthBoundaryFalse [
+
+	| coordinate actual |
+	coordinate := 0@2.
+	actual := grid4x4 atNorthBoundary: coordinate.
+	
+	self deny: actual
+]
+
+{ #category : #tests }
+GridTest >> testAtNorthBoundaryTrue [
+
+	| coordinate actual |
+	coordinate := 0@3.
+	actual := grid4x4 atNorthBoundary: coordinate.
+	
+	self assert: actual
+]
+
+{ #category : #tests }
 GridTest >> testCellBottomOnForLinked [
 
 	| expected actual |
