@@ -22,19 +22,22 @@ Class {
 }
 
 { #category : #'instance creation' }
-MPBinaryTree class >> on: aGrid [
-	| neighbours neighbour |
-	aGrid eachCell do: [ :cell | 
-		neighbours := LinkedList new.
-		(cell north) ifNotNil: [ neighbours add: cell north ].
-		(cell east) ifNotNil: [ neighbours add: cell east ].
-		
-		"TODO: Could extract to `self linkNeighbours` or `self linkCells`"
-		neighbours isEmpty ifFalse: [  
+MPBinaryTree class >> applyTo: aGrid [
+
+	| extent |
+	extent := aGrid extent.
+	
+	0 to: extent x do: [ :x | 
+		0 to: extent y do: [ :y | | coordinate neighbours neighbour |
+			neighbours := LinkedList new.
+			coordinate := x@y.
+			[ neighbours add: (aGrid northNeighbourOf: coordinate) ] on: OutOfGridBounds do: [ :ex | ex return ].
+			[ neighbours add: (aGrid eastNeighbourOf: coordinate) ] on: OutOfGridBounds do: [ :ex | ex return ].
+
+			neighbours isEmpty ifFalse: [
 			neighbour := neighbours atRandom.
-			neighbour ifNotNil: [ cell link: neighbour ]
+			aGrid link: coordinate to: neighbour.
 			].
 		].
-
-	^ aGrid
+	]
 ]

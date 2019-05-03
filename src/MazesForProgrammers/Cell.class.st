@@ -92,6 +92,7 @@ Cell >> link: aCell [
 
 { #category : #links }
 Cell >> link: aCell bidirectional: aBoolean [
+
 	links at: aCell put: true.
 	aBoolean ifTrue: [ aCell link: self bidirectional: false ].
 	^ self

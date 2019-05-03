@@ -5,7 +5,8 @@ I am a container for a grid of Cells.
 
 ## Colaborators
 
-I contain many instances of Cell.
+I contain many instances of Cell. I use OutOfGridBounds as an exception when an attempt to
+access a coordinate outside my boundaries is made.
 
 ## Usage
 
@@ -24,6 +25,33 @@ as a collection.
 grid eachCell. 
 ```
 
+### Access
+
+I make use of instances of `Point` to access the cells of my grid. The x and y coordinates of the
+`Point` instance match the cell of the same position. The first poisition is `0@0` so the grid
+can be considered zero indexed. An `OutOfGridBounds exception is signaled if an attempt is made
+to access coordinates outside the grid.
+
+```
+grid eastNeighbourOf: 2@2.
+```
+
+```
+grid northNeighbourOf: 2@2.
+```
+
+### Linking
+
+Cells can be linked together and tested to see if they are linked.
+
+```
+grid link: 2@2 to: 2@3.
+```
+
+```
+grid liked: 2@2 to: 2@3. ""true""
+```
+
 ### Printing
 
 I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
@@ -38,6 +66,7 @@ grid displayStringOn: Transcript. ""Or any other stream object.""
 
 - totalRows, totalColumns: The total number of rows and columns in this Grid.
 - grid: A two dimensional array of Cells.
+- extent: A `Point` instance representing the maximum coordinates of the grid. Zero based index.
 
 ## TODO
 
@@ -55,7 +84,8 @@ Class {
 	#instVars : [
 		'grid',
 		'totalRows',
-		'totalColumns'
+		'totalColumns',
+		'extent'
 	],
 	#classVars : [
 		'CellBody',
@@ -140,6 +170,7 @@ Grid class >> of: totalRows by: totalColumns [
 		initializeGrid;
 		initializeCellCoordinates; 
 		configureCells;
+		extent: (totalRows - 1) @ (totalColumns - 1)
 		yourself
 ]
 
@@ -166,6 +197,13 @@ Grid >> at: rowCoordinate at: columnCoordinate [
 	(rowCoordinate between: 1 and: totalRows) ifFalse: [ ^ nil ].
 	(columnCoordinate between: 1 and: ((grid at: rowCoordinate) size)) ifFalse: [ ^ nil ].
 	^ (grid at: rowCoordinate) at: columnCoordinate 
+]
+
+{ #category : #'accessing - private' }
+Grid >> atCoordinates: aPoint [
+	
+	self signalIfOutOfBounds: aPoint.
+	^ self at: (aPoint x + 1) at: (aPoint y + 1)
 ]
 
 { #category : #'initialization - private' }
@@ -223,6 +261,28 @@ Grid >> eachRow [
 	^ self grid do: [ :row | row ]
 ]
 
+{ #category : #accessing }
+Grid >> eastNeighbourOf: aPoint [ 
+	
+	| eastNeighbour |
+	self signalIfOutOfBounds: aPoint.
+	eastNeighbour := (aPoint x + 1) @ (aPoint y).
+	self signalIfOutOfBounds: eastNeighbour. 
+	^ eastNeighbour
+]
+
+{ #category : #accessing }
+Grid >> extent [
+
+	^ extent
+]
+
+{ #category : #accessing }
+Grid >> extent: aPoint [ 
+
+	extent := aPoint
+]
+
 { #category : #'initialization - private' }
 Grid >> fillColumn [
 	| column |
@@ -250,6 +310,34 @@ Grid >> initializeGrid [
 	1 to: totalRows do: [ :row | grid at: row put: self fillColumn ]
 ]
 
+{ #category : #linking }
+Grid >> link: aPoint to: aPoint2 [ 
+	
+	| firstCell secondCell |
+	firstCell := self atCoordinates: aPoint.
+	secondCell := self atCoordinates: aPoint2.
+	
+	firstCell link: secondCell 
+]
+
+{ #category : #testing }
+Grid >> linked: aPoint to: aPoint2 [
+	| firstCell secondCell |
+	firstCell := self atCoordinates: aPoint.
+	secondCell := self atCoordinates: aPoint2.
+	^ firstCell linked: secondCell
+]
+
+{ #category : #accessing }
+Grid >> northNeighbourOf: aPoint [ 
+
+	| northNeighbour |
+	self signalIfOutOfBounds: aPoint.
+	northNeighbour := (aPoint x) @ (aPoint y + 1).
+	self signalIfOutOfBounds: northNeighbour.
+	^ northNeighbour
+]
+
 { #category : #accessing }
 Grid >> randomCell [
 	| row column random |
@@ -257,7 +345,29 @@ Grid >> randomCell [
 	row := random nextInt: totalRows.
 	column := random nextInt: ((grid at: row) size).
 	
-	^ grid at: row at: column 
+	^ (grid at: row) at: column 
+]
+
+{ #category : #signaling }
+Grid >> signalIfOutOfBounds: aPoint [ 
+
+	((aPoint x < 0) or: (aPoint y < 0))
+		 ifTrue: [ 
+			OutOfGridBounds new
+				coordinate: aPoint;
+				minBound: 0@0;
+				maxBound: extent;
+				signal
+			 ].
+		
+	((aPoint x > extent x) or: (aPoint y > extent y))
+		ifTrue: [ 
+			OutOfGridBounds new
+				coordinate: aPoint;
+				minBound: 0@0;
+				maxBound: extent;
+				signal
+			 ]
 ]
 
 { #category : #accessing }

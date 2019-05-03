@@ -123,6 +123,39 @@ GridTest >> testEachCell [
 ]
 
 { #category : #tests }
+GridTest >> testEastNeighbourOf [
+
+	| coordinate expected actual |
+	coordinate := 2@2.
+	expected := 3@2.
+	actual := grid4x4 eastNeighbourOf: coordinate.
+	self assert: actual equals: expected
+]
+
+{ #category : #tests }
+GridTest >> testLinkTo [
+
+	| firstCoordinate secondCoordinate actual |
+	firstCoordinate := 2@2.
+	secondCoordinate := 2@1.
+	
+	grid4x4 link: firstCoordinate to: secondCoordinate.
+	
+	actual := grid4x4 linked: firstCoordinate to: secondCoordinate.
+	self assert: actual
+]
+
+{ #category : #tests }
+GridTest >> testNorthNeighbourOf [
+
+	| coordinate expected actual |
+	coordinate := 2@2.
+	expected := 2@3.
+	actual := grid4x4 northNeighbourOf: coordinate.
+	self assert: actual equals: expected
+]
+
+{ #category : #tests }
 GridTest >> testOfByRectangularGrid [
 	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
 	numberOfRows := 3.
@@ -152,6 +185,33 @@ GridTest >> testOfBySquareGrid [
 	self assert: totalCells equals: 16. 
 	self assert: correctNumberOfRows.
 	self assert: correctNumberOfColumns 
+]
+
+{ #category : #tests }
+GridTest >> testSignalIfOutOfBounds [
+	
+	| outOfMaxBounds outOfMinBounds |
+	outOfMaxBounds := 4@4.
+	outOfMinBounds := -1@(-1).
+
+	self
+		should: [ grid4x4 signalIfOutOfBounds: outOfMaxBounds ]
+		raise: OutOfGridBounds.
+		
+	self 
+		should: [ grid4x4 signalIfOutOfBounds: outOfMinBounds ]
+		raise: OutOfGridBounds
+]
+
+{ #category : #tests }
+GridTest >> testSignalIfOutOfBoundsWithValid [
+	
+	| inBoundsCoordinate |
+	inBoundsCoordinate := 2@2.
+
+	self
+		shouldnt: [ grid4x4 signalIfOutOfBounds: inBoundsCoordinate ]
+		raise: OutOfGridBounds
 ]
 
 { #category : #tests }

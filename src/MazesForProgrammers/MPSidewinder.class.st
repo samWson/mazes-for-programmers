@@ -22,7 +22,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-MPSidewinder class >> on: aGrid [
+MPSidewinder class >> applyTo: aGrid [
 	
 	aGrid eachRow do: [ :row | | run |
 		run := LinkedList new.

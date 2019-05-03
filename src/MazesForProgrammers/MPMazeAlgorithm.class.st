@@ -31,6 +31,13 @@ Class {
 	#category : #MazesForProgrammers
 }
 
+{ #category : #'instance creation' }
+MPMazeAlgorithm class >> applyTo: aGrid [
+	"Generate a maze on aGrid with the class algorithm."
+	
+	self subclassResponsibility 
+]
+
 { #category : #examples }
 MPMazeAlgorithm class >> defaultMaze [
 	self mazeOf: 4 by: 4
@@ -44,11 +51,4 @@ MPMazeAlgorithm class >> mazeOf: totalRows by: totalColumns [
 	self on: grid.
 	grid displayStringOn: Transcript.
 	Transcript flush
-]
-
-{ #category : #'instance creation' }
-MPMazeAlgorithm class >> on: aGrid [
-	"Generate a maze on aGrid."
-	
-	self subclassResponsibility 
 ]
