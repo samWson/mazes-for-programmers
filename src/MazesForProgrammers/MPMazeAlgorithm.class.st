@@ -48,7 +48,7 @@ MPMazeAlgorithm class >> mazeOf: totalRows by: totalColumns [
 
 	| grid |
 	grid := Grid of: totalRows by: totalColumns.
-	self on: grid.
+	self applyTo: grid.
 	grid displayStringOn: Transcript.
 	Transcript flush
 ]

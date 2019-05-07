@@ -25,6 +25,7 @@ Class {
 MPBinaryTree class >> applyTo: aGrid [
 
 	| extent |
+	self flag: #todo. "Refactor to use an instance so behaviour can easily factored out into methods, making this more understandable."
 	extent := aGrid extent.
 	
 	0 to: extent x do: [ :x | 
