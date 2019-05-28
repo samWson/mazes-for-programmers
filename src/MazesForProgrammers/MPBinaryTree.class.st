@@ -18,6 +18,9 @@ Mazes for Programmers, Jamis Buck, page 58.
 Class {
 	#name : #MPBinaryTree,
 	#superclass : #MPMazeAlgorithm,
+	#instVars : [
+		'grid'
+	],
 	#category : #MazesForProgrammers
 }
 
@@ -43,4 +46,46 @@ MPBinaryTree class >> applyTo: aGrid [
 	].
 
 	^ aGrid
+]
+
+{ #category : #operations }
+MPBinaryTree >> applyAlgorithm [
+
+	| extent |
+	extent := grid extent.
+
+	0 to: extent x do: [ :x | 
+		0 to: extent y do: [ :y | | neighbors |
+			neighbors := self neighborsOf: x@y.
+			self link: x@y toRandomNeighbor: neighbors.
+		].
+	]
+]
+
+{ #category : #accessing }
+MPBinaryTree >> grid: aCollection [ 
+
+	grid := aCollection
+]
+
+{ #category : #'linking - private' }
+MPBinaryTree >> link: coordinate toRandomNeighbor: neighbors [
+	
+	| neighbor |
+	^ neighbors isEmpty 
+		ifFalse: [ 
+			neighbor := neighbors atRandom.
+			grid link: coordinate to: neighbor 
+			]
+]
+
+{ #category : #'as yet unclassified' }
+MPBinaryTree >> neighborsOf: aPoint [
+
+	| neighbors |
+	neighbors := LinkedList new.
+	[ neighbors add: (grid northNeighbourOf: aPoint) ] on: OutOfGridBounds do: [ :ex | ex return ].
+	[ neighbors add: (grid eastNeighbourOf: aPoint) ] on: OutOfGridBounds do: [ :ex | ex return ].
+
+	^ neighbors
 ]

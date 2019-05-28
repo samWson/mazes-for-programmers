@@ -10,6 +10,12 @@ defined by subclasses.
 I use OutOfGridBounds as an exception when an attempt to access a coordinate 
 outside my boundaries is made.
 
+### Linking Strategy
+
+I use an instance of `MPMazeAlgorithm` to link the cells of my grid. This is 
+assigned to the instance variable `linkingStrategy`. This follows the 
+Strategy Pattern of object oriented design.
+
 ## Usage
 
 I have a class method for creation of instances with a defined number of rows and columns.
@@ -63,6 +69,7 @@ grid atNorthBoundary: 3@3.
 
 - extent: A `Point` instance representing the maximum coordinates of the grid. Zero based index.
 - grid: A container for a grid defined by x and y coordinates. Implementation is a subclass responsibility.
+- linkingStrategy: The algorithm that will link the grid cells to create passages.
 - totalRows, totalColumns: The total number of rows and columns in this Grid.
 
 ## TODO
@@ -80,7 +87,8 @@ Class {
 		'extent',
 		'grid',
 		'totalColumns',
-		'totalRows'
+		'totalRows',
+		'linkingStrategy'
 	],
 	#classVars : [
 		'CellBody',
@@ -228,9 +236,22 @@ MPGrid >> link: aPoint to: aPoint2 [
 ]
 
 { #category : #linking }
+MPGrid >> linkCells [
+
+	linkingStrategy applyAlgorithm
+	
+]
+
+{ #category : #linking }
 MPGrid >> linked: aPoint to: aPoint2 [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+MPGrid >> linkingStrategy: anMPMazeAlgorithm [
+	
+	linkingStrategy := anMPMazeAlgorithm
 ]
 
 { #category : #accessing }

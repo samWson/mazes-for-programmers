@@ -5,7 +5,7 @@ I am an abstraction of a maze generating algorithm. I am an Abstract class.
 
 ## Colaborators
 
-I make use of the Grid and Cell classes to generate the passages of a maze.
+I make use of the Grid class to generate the passages of a maze.
 
 ## Usage
 
@@ -41,6 +41,12 @@ MPMazeAlgorithm class >> applyTo: aGrid [
 { #category : #examples }
 MPMazeAlgorithm class >> defaultMaze [
 	self mazeOf: 4 by: 4
+]
+
+{ #category : #'instance creation' }
+MPMazeAlgorithm class >> for: anMPGrid [
+
+	^ self new grid: anMPGrid
 ]
 
 { #category : #'instance creation' }
