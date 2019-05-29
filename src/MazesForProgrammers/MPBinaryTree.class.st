@@ -18,9 +18,6 @@ Mazes for Programmers, Jamis Buck, page 58.
 Class {
 	#name : #MPBinaryTree,
 	#superclass : #MPMazeAlgorithm,
-	#instVars : [
-		'grid'
-	],
 	#category : #MazesForProgrammers
 }
 
