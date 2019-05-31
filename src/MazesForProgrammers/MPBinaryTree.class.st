@@ -59,12 +59,6 @@ MPBinaryTree >> applyAlgorithm [
 	]
 ]
 
-{ #category : #accessing }
-MPBinaryTree >> grid: aCollection [ 
-
-	grid := aCollection
-]
-
 { #category : #'linking - private' }
 MPBinaryTree >> link: coordinate toRandomNeighbor: neighbors [
 	

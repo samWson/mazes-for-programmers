@@ -88,3 +88,9 @@ MPMazeAlgorithm >> applyAlgorithm [
 	
 	self subclassResponsibility 
 ]
+
+{ #category : #accessing }
+MPMazeAlgorithm >> grid: aCollection [ 
+
+	grid := aCollection
+]
