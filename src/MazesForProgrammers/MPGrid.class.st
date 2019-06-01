@@ -249,9 +249,9 @@ MPGrid >> linked: aPoint to: aPoint2 [
 ]
 
 { #category : #accessing }
-MPGrid >> linkingStrategy: anMPMazeAlgorithm [
+MPGrid >> linkingStrategy: anMPLinkingAlgorithm [
 	
-	linkingStrategy := anMPMazeAlgorithm
+	linkingStrategy := anMPLinkingAlgorithm
 ]
 
 { #category : #accessing }

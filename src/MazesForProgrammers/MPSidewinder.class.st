@@ -24,7 +24,7 @@ Mazes for Programmers, Jamis Buck, page 86.
 "
 Class {
 	#name : #MPSidewinder,
-	#superclass : #MPMazeAlgorithm,
+	#superclass : #MPLinkingAlgorithm,
 	#instVars : [
 		'run',
 		'atEastBoundary',
