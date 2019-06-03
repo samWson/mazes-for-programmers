@@ -21,30 +21,6 @@ Class {
 	#category : #MazesForProgrammers
 }
 
-{ #category : #'instance creation' }
-MPBinaryTree class >> applyTo: aGrid [
-
-	| extent |
-	self flag: #todo. "Refactor to use an instance so behaviour can easily factored out into methods, making this more understandable."
-	extent := aGrid extent.
-	
-	0 to: extent x do: [ :x | 
-		0 to: extent y do: [ :y | | coordinate neighbours neighbour |
-			neighbours := LinkedList new.
-			coordinate := x@y.
-			[ neighbours add: (aGrid northNeighbourOf: coordinate) ] on: OutOfGridBounds do: [ :ex | ex return ].
-			[ neighbours add: (aGrid eastNeighbourOf: coordinate) ] on: OutOfGridBounds do: [ :ex | ex return ].
-
-			neighbours isEmpty ifFalse: [
-			neighbour := neighbours atRandom.
-			aGrid link: coordinate to: neighbour.
-			].
-		].
-	].
-
-	^ aGrid
-]
-
 { #category : #operations }
 MPBinaryTree >> applyAlgorithm [
 

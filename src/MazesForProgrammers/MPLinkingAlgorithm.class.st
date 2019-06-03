@@ -28,13 +28,6 @@ anMPBinaryTree applyAlgorithm.
 
 - grid: The `MPGrid` instance to which my algorithm will be applied.
 
-## ToDo
-
-I am to be changed to work with `MPGrid` according to the Strategy Pattern.
-- Maze creation is to be moved to another class.
-- The public instance creation interface will be left at `MPMazeAlgorithm class>>#for:`.
-- Consider renaming the class to `MPLinkingAlgorithm`.
-
 ## Reference
 
 Mazes for Programmers, Jamis Buck.
@@ -47,13 +40,6 @@ Class {
 	],
 	#category : #MazesForProgrammers
 }
-
-{ #category : #'instance creation' }
-MPLinkingAlgorithm class >> applyTo: aGrid [
-	"Generate a maze on aGrid with the class algorithm."
-	
-	self subclassResponsibility 
-]
 
 { #category : #'instance creation' }
 MPLinkingAlgorithm class >> for: anMPGrid [
