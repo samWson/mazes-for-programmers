@@ -124,6 +124,18 @@ MPBitfieldGrid class >> initialize [
 	UnlinkedCell := 2r0000
 ]
 
+{ #category : #testing }
+MPBitfieldGrid class >> linkedEast: anInteger [
+	self flag: #limitation. "A bitfield cell will know if it is linked in a direction but we have no way of knowing if the link is bidirectional because the cell knows nothing of its neighbors."
+	^ (anInteger bitAnd: 2r0010) = 2r0010
+]
+
+{ #category : #testing }
+MPBitfieldGrid class >> linkedSouth: anInteger [
+	self flag: #limitation. "A bitfield cell will know if it is linked in a direction but we have no way of knowing if the link is bidirectional because the cell knows nothing of its neighbors."
+	^ (anInteger bitAnd: 2r0100) = 2r0100
+]
+
 { #category : #constants }
 MPBitfieldGrid class >> north [
 
@@ -165,7 +177,7 @@ MPBitfieldGrid class >> west [
 
 { #category : #mapping }
 MPBitfieldGrid >> cardinalDirectionOfIndex: anInteger [
-	
+
 	^ self class cardinalDirectionMappings at: anInteger
 ]
 
@@ -180,13 +192,58 @@ MPBitfieldGrid >> directionFrom: aPoint to: aNeighboringPoint [
 	^ self cardinalDirectionOfIndex: index
 ]
 
+{ #category : #displaying }
+MPBitfieldGrid >> displayStringOn: aStream [
+
+	| outputStream |
+	self flag: #todo. "This functionality might be worth extracting into a trait."
+	outputStream := String new writeStream.
+	self class topBoundaryOn: outputStream length: totalColumns.
+
+	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
+		topHalfStream := String new writeStream.
+		bottomHalfStream := String new writeStream.
+		topHalf := '|'.
+		bottomHalf := '+'.
+		topHalfStream << topHalf.
+		bottomHalfStream << bottomHalf.
+
+		row do: [ :cell |
+			self class cellTopOn: topHalfStream for: cell.
+			self class cellBottomOn: bottomHalfStream for: cell.
+			].
+
+		topHalfStream cr.
+		bottomHalfStream cr.
+		
+		outputStream 
+			<< topHalfStream contents;
+			<< bottomHalfStream contents.
+		 ].
+	
+	outputStream contents displayStringOn: aStream
+]
+
+{ #category : #contents }
+MPBitfieldGrid >> eachRow [
+
+	| reversedRows cells rowLength |
+	rowLength := totalColumns. 
+	cells := ReadStream on: grid.
+	reversedRows := Stack new.
+	[ cells atEnd ] whileFalse: [ reversedRows push: (cells next: rowLength) ].
+	^ Array newFrom: reversedRows
+	
+]
+
 { #category : #mapping }
 MPBitfieldGrid >> indexAtCoordinates: aPoint [
 	"Map aPoint to the internal implementation index."
 
-	| multiplier |
-	multiplier := aPoint y + 1.
-	^ (aPoint x + 1) * multiplier
+	| rowLength yAxisShift |
+	rowLength := totalColumns.
+	yAxisShift := rowLength * aPoint y.
+	^ (aPoint x + 1) + yAxisShift
 ]
 
 { #category : #'initialization - private' }
@@ -212,7 +269,7 @@ MPBitfieldGrid >> link: aPoint to: aNeighboringPoint [
 	neighboringIndex := self indexAtCoordinates: aNeighboringPoint.
 	
 	linkDirection := self directionFrom: aPoint to: aNeighboringPoint.
-	
+
 	self link: index to: neighboringIndex direction: linkDirection
 ]
 
@@ -233,7 +290,7 @@ MPBitfieldGrid >> linked: aPoint to: aNeighboringPoint [
 	"Return true if the two points are linked bidirectionally."
 	
 	| directionToNeighbor cell linkedToNeighbor neighboringCell directionToPoint linkedToPoint |
-	self signalIfInvalid: aPoint neighboringPoint: aNeighboringPoint. 
+	self signalIfInvalid: aPoint neighboringPoint: aNeighboringPoint.
 	
 	directionToNeighbor := self directionFrom: aPoint to: aNeighboringPoint.
 	directionToPoint := self invertDirection: directionToNeighbor.

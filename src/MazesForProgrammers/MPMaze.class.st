@@ -59,6 +59,7 @@ MPMaze class >> fromConfiguration: aDictionary [
 MPMaze class >> mazeOf: totalRows by: totalColumns [
 
 	| grid |
+	self flag: #review. "This method might be redundant."
 	grid := Grid of: totalRows by: totalColumns.
 	grid linkingStrategy: (MPBinaryTree for: grid).
 	grid linkCells.

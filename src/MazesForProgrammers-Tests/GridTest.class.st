@@ -186,6 +186,38 @@ GridTest >> testLinkTo [
 ]
 
 { #category : #tests }
+GridTest >> testLinkedEastFalse [
+
+	firstCell east: secondCell.
+	self assert: (grid4x4 class linkedEast: firstCell) equals: false
+]
+
+{ #category : #tests }
+GridTest >> testLinkedEastTrue [
+
+	firstCell east: secondCell.
+	firstCell link: secondCell.
+
+	self assert: (grid4x4 class linkedEast: firstCell) equals: true
+]
+
+{ #category : #tests }
+GridTest >> testLinkedSouthFalse [
+
+	firstCell south: secondCell.
+	self assert: (grid4x4 class linkedSouth: firstCell) equals: false
+]
+
+{ #category : #tests }
+GridTest >> testLinkedSouthTrue [
+
+	firstCell south: secondCell.
+	firstCell link: secondCell.
+	
+	self assert: (grid4x4 class linkedSouth: firstCell) equals: true
+]
+
+{ #category : #tests }
 GridTest >> testNorthNeighbourOf [
 
 	| coordinate expected actual |

@@ -53,6 +53,12 @@ grid link: 2@2 to: 2@3.
 grid liked: 2@2 to: 2@3. ""true""
 ```
 
+### Testing Protocol
+
+On my class side I have the methods `MPGrid class>>#linkedSouth:` and `MPGrid class>>#linkedEast:`.
+These test if a cell is linked in their respective direction. These are abstract methods and are 
+implemented in subclasses.
+
 ### Boundaries
 
 Boolean methods are available for testing if a coordinate is adjacent to a boundary.
@@ -63,6 +69,16 @@ grid atEastBoundary: 3@3.
 
 ```
 grid atNorthBoundary: 3@3.
+```
+
+### Printing
+
+I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
+streamed. I have a number of helper methods on my class side in the `streaming - helpers` protocol
+that are used to make up the individual components of my grid in string form. 
+
+```
+grid displayStringOn: Transcript. ""Or any other stream object.""
 ```
 
 ## Instance Variables
@@ -113,7 +129,11 @@ MPGrid class >> cellBottomOn: aWriteStream for: aCell [
 	| southCellBoundary |
 	southCellBoundary := aCell 
 		ifNil: [ self unlinkedHorizontalCellBoundary ]
-		ifNotNil: [ (aCell linked: aCell south) ifTrue: [ self linkedHorizontalCellBoundary ] ifFalse: [ self unlinkedHorizontalCellBoundary ] ].
+		ifNotNil: [ 
+			(self linkedSouth: aCell) 
+				ifTrue: [ self linkedHorizontalCellBoundary ] 
+				ifFalse: [ self unlinkedHorizontalCellBoundary ] 
+			].
 		
 	aWriteStream
 		<< southCellBoundary;
@@ -126,11 +146,17 @@ MPGrid class >> cellCorner [
 ]
 
 { #category : #'streaming - helpers' }
-MPGrid class >> cellTopOn: aWriteStream for: aCell [ 
+MPGrid class >> cellTopOn: aWriteStream for: aCell [
+	"Write the ASCII representation of the top half of aCell to aWriteStream."
+	
 	| eastCellBoundry |
 	eastCellBoundry := aCell
 		ifNil: [ self unlinkedVerticalCellBoundary ]
-		ifNotNil: [ (aCell linked: aCell east) ifTrue: [ self linkedVerticalCellBoundary ] ifFalse: [ self unlinkedVerticalCellBoundary ] ].
+		ifNotNil: [
+			(self linkedEast: aCell) 
+				ifTrue: [ self linkedVerticalCellBoundary ] 
+				ifFalse: [ self unlinkedVerticalCellBoundary ] 
+			].
 	
 	aWriteStream
 		<< self cellBody;
@@ -156,9 +182,21 @@ MPGrid class >> initialize [
 	
 ]
 
+{ #category : #testing }
+MPGrid class >> linkedEast: aCell [
+
+	self subclassResponsibility 
+]
+
 { #category : #constants }
 MPGrid class >> linkedHorizontalCellBoundary [
 	^ LinkedHorizontalCellBoundary 
+]
+
+{ #category : #testing }
+MPGrid class >> linkedSouth: aCell [
+
+	self subclassResponsibility 
 ]
 
 { #category : #constants }
@@ -202,6 +240,19 @@ MPGrid >> atNorthBoundary: aPoint [
 	^ (aPoint y) = (extent y)
 ]
 
+{ #category : #displaying }
+MPGrid >> displayStringOn: aStream [
+
+	self flag: #review. "What if we used stacks instead of streams for doing the ascii art? Also what if MPGrid>>#eachRows returned a Stack?"
+	self subclassResponsibility
+]
+
+{ #category : #contents }
+MPGrid >> eachRow [
+
+	self subclassResponsibility 
+]
+
 { #category : #accessing }
 MPGrid >> eastNeighbourOf: aPoint [ 
 	
@@ -227,6 +278,12 @@ MPGrid >> extent: aPoint [
 { #category : #accessing }
 MPGrid >> grid [
 	^ grid
+]
+
+{ #category : #'initialization - private' }
+MPGrid >> initializeGrid [
+
+	^ self subclassResponsibility
 ]
 
 { #category : #linking }

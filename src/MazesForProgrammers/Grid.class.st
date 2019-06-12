@@ -22,16 +22,6 @@ as a collection.
 grid eachCell.
 ```
 
-### Printing
-
-I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
-streamed. I have a number of helper methods on my class side in the `streaming - helpers` protocol
-that are used to make up the individual components of my grid in string form. 
-
-```
-grid displayStringOn: Transcript. ""Or any other stream object.""
-```
-
 ## ToDo
 
 Rename class. Use a name that describes the implementation i.e. 2D Array. Add project prefix `MP`.
@@ -45,6 +35,18 @@ Class {
 	#superclass : #MPGrid,
 	#category : #MazesForProgrammers
 }
+
+{ #category : #testing }
+Grid class >> linkedEast: aCell [
+	
+	^ aCell linked: aCell east
+]
+
+{ #category : #testing }
+Grid class >> linkedSouth: aCell [ 
+
+	^ aCell linked: aCell south
+]
 
 { #category : #'instance creation' }
 Grid class >> of: totalRows by: totalColumns [
@@ -88,11 +90,12 @@ Grid >> configureCells [
 
 { #category : #displaying }
 Grid >> displayStringOn: aStream [
+
 	| outputStream |
 	self flag: #todo. "This functionality might be worth extracting into a trait."
 	outputStream := String new writeStream.
 	self class topBoundaryOn: outputStream length: totalColumns.
-	
+
 	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
 		topHalfStream := String new writeStream.
 		bottomHalfStream := String new writeStream.
@@ -103,7 +106,7 @@ Grid >> displayStringOn: aStream [
 
 		row do: [ :cell |
 			self class cellTopOn: topHalfStream for: cell.
-			self class cellBottomOn: bottomHalfStream for: cell. 
+			self class cellBottomOn: bottomHalfStream for: cell.
 			].
 
 		topHalfStream cr.
@@ -150,11 +153,11 @@ Grid >> initializeGrid [
 ]
 
 { #category : #linking }
-Grid >> link: aPoint to: aPoint2 [ 
+Grid >> link: aPoint to: aNeighboringPoint [ 
 	
 	| firstCell secondCell |
 	firstCell := self atCoordinates: aPoint.
-	secondCell := self atCoordinates: aPoint2.
+	secondCell := self atCoordinates: aNeighboringPoint.
 	
 	firstCell link: secondCell 
 ]

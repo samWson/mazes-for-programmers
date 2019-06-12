@@ -58,6 +58,38 @@ MPBitfieldGridTest >> testLinkToSignalsOutOfBounds [
 ]
 
 { #category : #tests }
+MPBitfieldGridTest >> testLinkedEastFalse [
+
+	| southLinkedCell |
+	southLinkedCell := 2r0100.
+	self assert: (instance class linkedEast: southLinkedCell) equals: false
+]
+
+{ #category : #tests }
+MPBitfieldGridTest >> testLinkedEastTrue [ 
+
+	| eastLinkedCell |
+	eastLinkedCell := 2r0010.
+	self assert: (instance class linkedEast: eastLinkedCell) equals: true
+]
+
+{ #category : #tests }
+MPBitfieldGridTest >> testLinkedSouthFalse [
+
+	| eastLinkedCell |
+	eastLinkedCell := 2r0010.
+	self assert: (instance class linkedSouth: eastLinkedCell) equals: false
+]
+
+{ #category : #tests }
+MPBitfieldGridTest >> testLinkedSouthTrue [
+
+	| southLinkedCell |
+	southLinkedCell := 2r0100.
+	self assert: (instance class linkedSouth: southLinkedCell) equals: true
+]
+
+{ #category : #tests }
 MPBitfieldGridTest >> testLinkedToEastWest [
 
 	| firstCoordinate secondCoordinate cellLinkedEast cellLinkedWest |
