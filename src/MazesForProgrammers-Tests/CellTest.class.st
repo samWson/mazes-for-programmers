@@ -1,11 +1,11 @@
 "
-# CellTest
+# MPCellTest
 
-I am the TestCase for Cell.
+I am the TestCase for `MPCell`.
 
 ## Instance Variables
 
-A variety of Cell instances are provided for testing.
+A variety of `MPCell` instances are provided for testing.
 "
 Class {
 	#name : #CellTest,
@@ -23,12 +23,12 @@ Class {
 { #category : #running }
 CellTest >> setUp [
 	super setUp.
-	firstCell := Cell new.
-	secondCell := Cell new.
-	northCell := Cell new.
-	eastCell := Cell new.
+	firstCell := MPCell new.
+	secondCell := MPCell new.
+	northCell := MPCell new.
+	eastCell := MPCell new.
 	
-	cellWithNeighbours := Cell new
+	cellWithNeighbours := MPCell new
 		north: northCell;
 		east: eastCell;
 		yourself

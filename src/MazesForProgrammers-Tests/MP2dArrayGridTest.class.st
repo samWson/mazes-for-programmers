@@ -1,10 +1,10 @@
 "
-# GridTest
+# MP2dArrayGridTest
 
-I am the TestCase for Grid.
+I am the TestCase for MP2dArrayGrid.
 "
 Class {
-	#name : #GridTest,
+	#name : #MP2dArrayGridTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'asciiDisplayStream',
@@ -17,17 +17,17 @@ Class {
 }
 
 { #category : #running }
-GridTest >> setUp [
+MP2dArrayGridTest >> setUp [
 	super setUp.
-	subjectClass := Grid.
-	grid4x4 := Grid of: 4 by: 4. 
-	firstCell := Cell new.
-	secondCell := Cell new.
+	subjectClass := MP2dArrayGrid.
+	grid4x4 := MP2dArrayGrid of: 4 by: 4. 
+	firstCell := MPCell new.
+	secondCell := MPCell new.
 	asciiDisplayStream := String new writeStream
 ]
 
 { #category : #tests }
-GridTest >> testAtEastBoundaryFalse [
+MP2dArrayGridTest >> testAtEastBoundaryFalse [
 
 	| coordinate actual |
 	coordinate := 2@0.
@@ -37,7 +37,7 @@ GridTest >> testAtEastBoundaryFalse [
 ]
 
 { #category : #tests }
-GridTest >> testAtEastBoundaryTrue [
+MP2dArrayGridTest >> testAtEastBoundaryTrue [
 
 	| coordinate actual |
 	coordinate := 3@0.
@@ -47,7 +47,7 @@ GridTest >> testAtEastBoundaryTrue [
 ]
 
 { #category : #tests }
-GridTest >> testAtNorthBoundaryFalse [
+MP2dArrayGridTest >> testAtNorthBoundaryFalse [
 
 	| coordinate actual |
 	coordinate := 0@2.
@@ -57,7 +57,7 @@ GridTest >> testAtNorthBoundaryFalse [
 ]
 
 { #category : #tests }
-GridTest >> testAtNorthBoundaryTrue [
+MP2dArrayGridTest >> testAtNorthBoundaryTrue [
 
 	| coordinate actual |
 	coordinate := 0@3.
@@ -67,7 +67,7 @@ GridTest >> testAtNorthBoundaryTrue [
 ]
 
 { #category : #tests }
-GridTest >> testCellBottomOnForLinked [
+MP2dArrayGridTest >> testCellBottomOnForLinked [
 
 	| expected actual |
 	firstCell south: secondCell.
@@ -81,7 +81,7 @@ GridTest >> testCellBottomOnForLinked [
 ]
 
 { #category : #tests }
-GridTest >> testCellBottomOnForNil [
+MP2dArrayGridTest >> testCellBottomOnForNil [
 
 	| expected actual |
 	expected := subjectClass unlinkedHorizontalCellBoundary , subjectClass cellCorner.
@@ -93,7 +93,7 @@ GridTest >> testCellBottomOnForNil [
 ]
 
 { #category : #tests }
-GridTest >> testCellBottomOnForUnlinked [
+MP2dArrayGridTest >> testCellBottomOnForUnlinked [
 
 	| expected actual |
 	firstCell south: secondCell.	
@@ -106,7 +106,7 @@ GridTest >> testCellBottomOnForUnlinked [
 ]
 
 { #category : #tests }
-GridTest >> testCellTopOnForLinked [
+MP2dArrayGridTest >> testCellTopOnForLinked [
 	
 	| expected actual |
 	firstCell east: secondCell.
@@ -123,7 +123,7 @@ GridTest >> testCellTopOnForLinked [
 ]
 
 { #category : #tests }
-GridTest >> testCellTopOnForNil [
+MP2dArrayGridTest >> testCellTopOnForNil [
 
 	| expected actual |
 	expected := subjectClass cellBody , subjectClass unlinkedVerticalCellBoundary.
@@ -137,7 +137,7 @@ GridTest >> testCellTopOnForNil [
 ]
 
 { #category : #tests }
-GridTest >> testCellTopOnForUnlinked [
+MP2dArrayGridTest >> testCellTopOnForUnlinked [
 
 	| expected actual |
 	firstCell east: secondCell.
@@ -151,19 +151,19 @@ GridTest >> testCellTopOnForUnlinked [
 ]
 
 { #category : #tests }
-GridTest >> testEachCell [
+MP2dArrayGridTest >> testEachCell [
 	| grid actual allAreCells |
-	grid := Grid of: 2 by: 2.
+	grid := MP2dArrayGrid of: 2 by: 2.
 	
 	actual := grid eachCell.
-	allAreCells := actual allSatisfy: [ :each | each class = Cell ].
+	allAreCells := actual allSatisfy: [ :each | each class = MPCell ].
 	
 	self assert: actual size equals: 4.
 	self assert: allAreCells 
 ]
 
 { #category : #tests }
-GridTest >> testEastNeighbourOf [
+MP2dArrayGridTest >> testEastNeighbourOf [
 
 	| coordinate expected actual |
 	coordinate := 2@2.
@@ -173,7 +173,7 @@ GridTest >> testEastNeighbourOf [
 ]
 
 { #category : #tests }
-GridTest >> testLinkTo [
+MP2dArrayGridTest >> testLinkTo [
 
 	| firstCoordinate secondCoordinate actual |
 	firstCoordinate := 2@2.
@@ -186,14 +186,14 @@ GridTest >> testLinkTo [
 ]
 
 { #category : #tests }
-GridTest >> testLinkedEastFalse [
+MP2dArrayGridTest >> testLinkedEastFalse [
 
 	firstCell east: secondCell.
 	self assert: (grid4x4 class linkedEast: firstCell) equals: false
 ]
 
 { #category : #tests }
-GridTest >> testLinkedEastTrue [
+MP2dArrayGridTest >> testLinkedEastTrue [
 
 	firstCell east: secondCell.
 	firstCell link: secondCell.
@@ -202,14 +202,14 @@ GridTest >> testLinkedEastTrue [
 ]
 
 { #category : #tests }
-GridTest >> testLinkedSouthFalse [
+MP2dArrayGridTest >> testLinkedSouthFalse [
 
 	firstCell south: secondCell.
 	self assert: (grid4x4 class linkedSouth: firstCell) equals: false
 ]
 
 { #category : #tests }
-GridTest >> testLinkedSouthTrue [
+MP2dArrayGridTest >> testLinkedSouthTrue [
 
 	firstCell south: secondCell.
 	firstCell link: secondCell.
@@ -218,7 +218,7 @@ GridTest >> testLinkedSouthTrue [
 ]
 
 { #category : #tests }
-GridTest >> testNorthNeighbourOf [
+MP2dArrayGridTest >> testNorthNeighbourOf [
 
 	| coordinate expected actual |
 	coordinate := 2@2.
@@ -228,11 +228,11 @@ GridTest >> testNorthNeighbourOf [
 ]
 
 { #category : #tests }
-GridTest >> testOfByRectangularGrid [
+MP2dArrayGridTest >> testOfByRectangularGrid [
 	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
 	numberOfRows := 3.
 	numberOfColumns := 5.
-	grid := Grid of: numberOfRows by: numberOfColumns.
+	grid := MP2dArrayGrid of: numberOfRows by: numberOfColumns.
 	
 	correctNumberOfRows := grid grid size = numberOfRows.
 	correctNumberOfColumns := grid eachRow allSatisfy: [ :row | row size = numberOfColumns ].
@@ -244,11 +244,11 @@ GridTest >> testOfByRectangularGrid [
 ]
 
 { #category : #tests }
-GridTest >> testOfBySquareGrid [
+MP2dArrayGridTest >> testOfBySquareGrid [
 	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
 	numberOfRows := 4.
 	numberOfColumns := 4.
-	grid := Grid of: numberOfRows by: numberOfColumns.
+	grid := MP2dArrayGrid of: numberOfRows by: numberOfColumns.
 	
 	correctNumberOfRows := grid grid size = numberOfRows.
 	correctNumberOfColumns := grid eachRow allSatisfy: [ :row | row size = numberOfColumns ].
@@ -260,7 +260,7 @@ GridTest >> testOfBySquareGrid [
 ]
 
 { #category : #tests }
-GridTest >> testSignalIfOutOfBoundsNoException [
+MP2dArrayGridTest >> testSignalIfOutOfBoundsNoException [
 	
 	| inBoundsCoordinate |
 	inBoundsCoordinate := 2@2.
@@ -271,7 +271,7 @@ GridTest >> testSignalIfOutOfBoundsNoException [
 ]
 
 { #category : #tests }
-GridTest >> testSignalIfOutOfBoundsSignalException [
+MP2dArrayGridTest >> testSignalIfOutOfBoundsSignalException [
 	
 	| outOfMaxBounds outOfMinBounds |
 	outOfMaxBounds := 4@4.
@@ -287,7 +287,7 @@ GridTest >> testSignalIfOutOfBoundsSignalException [
 ]
 
 { #category : #tests }
-GridTest >> testTopBoundaryOn [
+MP2dArrayGridTest >> testTopBoundaryOn [
 	| expected actual |
 	expected := subjectClass cellCorner , (subjectClass horizontalCellBoundary repeat: grid4x4 totalColumns) , Character cr asString.
 	

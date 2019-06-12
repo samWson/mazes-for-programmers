@@ -1,11 +1,11 @@
 "
-# Cell
+# MPCell
 
 I am an individual cell of a grid. A grid will be composed of many instances of me.
 
 ## Colaborators
 
-I am used by instances of Grid to contain many instances of me.
+I am used by some subclases of MPGrid to contain many instances of me.
 
 ## Usage
 
@@ -45,7 +45,7 @@ Consider initializing Cell with a Point instance for row and column coordinates.
 Mazes for Programmers, Jamis Buck, page 50.
 "
 Class {
-	#name : #Cell,
+	#name : #MPCell,
 	#superclass : #Object,
 	#instVars : [
 		'row',
@@ -60,38 +60,38 @@ Class {
 }
 
 { #category : #'instance creation' }
-Cell class >> row: row column: column [
+MPCell class >> row: row column: column [
 	^ self new row: row column: column
 ]
 
 { #category : #accessing }
-Cell >> column [
+MPCell >> column [
 	^ column
 ]
 
 { #category : #accessing }
-Cell >> east [
+MPCell >> east [
 	^ east
 ]
 
 { #category : #accessing }
-Cell >> east: aCell [
+MPCell >> east: aCell [
 	east := aCell
 ]
 
 { #category : #initialization }
-Cell >> initialize [
+MPCell >> initialize [
 	links := Dictionary new
 ]
 
 { #category : #links }
-Cell >> link: aCell [
+MPCell >> link: aCell [
 	^ self link: aCell bidirectional: true
 	
 ]
 
 { #category : #links }
-Cell >> link: aCell bidirectional: aBoolean [
+MPCell >> link: aCell bidirectional: aBoolean [
 
 	links at: aCell put: true.
 	aBoolean ifTrue: [ aCell link: self bidirectional: false ].
@@ -99,70 +99,70 @@ Cell >> link: aCell bidirectional: aBoolean [
 ]
 
 { #category : #testing }
-Cell >> linked: aCell [
+MPCell >> linked: aCell [
 	^ self links includes: aCell
 ]
 
 { #category : #accessing }
-Cell >> links [
+MPCell >> links [
 	^ links keys
 ]
 
 { #category : #accessing }
-Cell >> neighbours [
+MPCell >> neighbours [
 	^ { north. south. east. west. } reject: [ :cell | cell isNil ] 
 ]
 
 { #category : #accessing }
-Cell >> north [
+MPCell >> north [
 	^ north
 ]
 
 { #category : #accessing }
-Cell >> north: aCell [
+MPCell >> north: aCell [
 	north := aCell
 ]
 
 { #category : #accessing }
-Cell >> row [
+MPCell >> row [
 	^ row
 ]
 
 { #category : #positioning }
-Cell >> row: rowPosition column: columnPosition [ 
+MPCell >> row: rowPosition column: columnPosition [ 
 	"TODO: consider using a point"
 	row := rowPosition.
 	column := columnPosition 
 ]
 
 { #category : #accessing }
-Cell >> south [
+MPCell >> south [
 	^ south
 ]
 
 { #category : #accessing }
-Cell >> south: aCell [
+MPCell >> south: aCell [
 	south := aCell
 ]
 
 { #category : #links }
-Cell >> unlink: aCell [
+MPCell >> unlink: aCell [
 	self unlink: aCell bidirectional: true
 ]
 
 { #category : #links }
-Cell >> unlink: aCell bidirectional: aBoolean [
+MPCell >> unlink: aCell bidirectional: aBoolean [
 	links removeKey: aCell.
 	aBoolean ifTrue: [ aCell unlink: self bidirectional: false ].
 	^ self
 ]
 
 { #category : #accessing }
-Cell >> west [
+MPCell >> west [
 	^ west
 ]
 
 { #category : #accessing }
-Cell >> west: aCell [
+MPCell >> west: aCell [
 	west := aCell
 ]

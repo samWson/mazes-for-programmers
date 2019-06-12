@@ -19,7 +19,7 @@ MPMazeImageTest >> setUp [
 
 	| grid |
 	super setUp.
-	grid := Grid of: 2 by: 2.
+	grid := MP2dArrayGrid of: 2 by: 2.
 	extent := MPMazeImage extentFrom: grid totalRows by: grid totalColumns.
 	instance := MPMazeImage new.
 	instance

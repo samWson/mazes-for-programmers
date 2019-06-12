@@ -1,11 +1,15 @@
 "
-# Grid
+# MP2dArrayGrid
 
-I am a container for a grid of Cells.
+I am a container for a grid of cell objects.
+
+## Implementation
+
+Internally my grid is represented as a two dimensional array containing Cell objects.
 
 ## Colaborators
 
-I contain many instances of Cell. 
+I contain many instances of Cell.
 
 ## Usage
 
@@ -31,25 +35,25 @@ Rename class. Use a name that describes the implementation i.e. 2D Array. Add pr
 Mazes for Programmers, Jamis Buck, page 53.
 "
 Class {
-	#name : #Grid,
+	#name : #MP2dArrayGrid,
 	#superclass : #MPGrid,
 	#category : #MazesForProgrammers
 }
 
 { #category : #testing }
-Grid class >> linkedEast: aCell [
+MP2dArrayGrid class >> linkedEast: aCell [
 	
 	^ aCell linked: aCell east
 ]
 
 { #category : #testing }
-Grid class >> linkedSouth: aCell [ 
+MP2dArrayGrid class >> linkedSouth: aCell [ 
 
 	^ aCell linked: aCell south
 ]
 
 { #category : #'instance creation' }
-Grid class >> of: totalRows by: totalColumns [
+MP2dArrayGrid class >> of: totalRows by: totalColumns [
 	^ self new totalRows: totalRows totalColumns: totalColumns;
 		initializeGrid;
 		initializeCellCoordinates; 
@@ -59,7 +63,7 @@ Grid class >> of: totalRows by: totalColumns [
 ]
 
 { #category : #'accessing - private' }
-Grid >> at: rowCoordinate at: columnCoordinate [
+MP2dArrayGrid >> at: rowCoordinate at: columnCoordinate [
 	self flag: #fixme. "Bounds checks may already be handled by the public interface. Double check."
 	(rowCoordinate between: 1 and: totalRows) ifFalse: [ ^ nil ].
 	(columnCoordinate between: 1 and: ((grid at: rowCoordinate) size)) ifFalse: [ ^ nil ].
@@ -67,14 +71,14 @@ Grid >> at: rowCoordinate at: columnCoordinate [
 ]
 
 { #category : #'accessing - private' }
-Grid >> atCoordinates: aPoint [
+MP2dArrayGrid >> atCoordinates: aPoint [
 	
 	self signalIfOutOfBounds: aPoint.
 	^ self at: (aPoint x + 1) at: (aPoint y + 1)
 ]
 
 { #category : #'initialization - private' }
-Grid >> configureCells [
+MP2dArrayGrid >> configureCells [
 	| rowCoordinate columnCoordinate |
 	self eachCell do: [ :cell |
 		rowCoordinate := cell row.
@@ -89,7 +93,7 @@ Grid >> configureCells [
 ]
 
 { #category : #displaying }
-Grid >> displayStringOn: aStream [
+MP2dArrayGrid >> displayStringOn: aStream [
 
 	| outputStream |
 	self flag: #todo. "This functionality might be worth extracting into a trait."
@@ -121,39 +125,39 @@ Grid >> displayStringOn: aStream [
 ]
 
 { #category : #contents }
-Grid >> eachCell [ 
+MP2dArrayGrid >> eachCell [ 
 	^ self eachRow flatCollect: [ :cell | cell ifNotNil: [ cell ] ] 
 ]
 
 { #category : #contents }
-Grid >> eachRow [
+MP2dArrayGrid >> eachRow [
 	^ self grid do: [ :row | row ]
 ]
 
 { #category : #'initialization - private' }
-Grid >> fillColumn [
+MP2dArrayGrid >> fillColumn [
 	| column |
 	column := Array ofSize: totalColumns.
-	1 to: totalColumns do: [ :index | column at: index put: Cell new ].
+	1 to: totalColumns do: [ :index | column at: index put: MPCell new ].
 	
 	^ column 
 ]
 
 { #category : #'initialization - private' }
-Grid >> initializeCellCoordinates [
+MP2dArrayGrid >> initializeCellCoordinates [
 	1 to: totalRows do: [ :rowIndex |
 		1 to: totalColumns do: [ :columnIndex | 
 			(self at: rowIndex at: columnIndex) row: rowIndex column: columnIndex ] ].
 ]
 
 { #category : #'initialization - private' }
-Grid >> initializeGrid [
+MP2dArrayGrid >> initializeGrid [
 	grid := Array ofSize: totalRows.
 	1 to: totalRows do: [ :row | grid at: row put: self fillColumn ]
 ]
 
 { #category : #linking }
-Grid >> link: aPoint to: aNeighboringPoint [ 
+MP2dArrayGrid >> link: aPoint to: aNeighboringPoint [ 
 	
 	| firstCell secondCell |
 	firstCell := self atCoordinates: aPoint.
@@ -163,7 +167,7 @@ Grid >> link: aPoint to: aNeighboringPoint [
 ]
 
 { #category : #testing }
-Grid >> linked: aPoint to: aPoint2 [
+MP2dArrayGrid >> linked: aPoint to: aPoint2 [
 	| firstCell secondCell |
 	firstCell := self atCoordinates: aPoint.
 	secondCell := self atCoordinates: aPoint2.
@@ -171,6 +175,6 @@ Grid >> linked: aPoint to: aPoint2 [
 ]
 
 { #category : #accessing }
-Grid >> size [ 
+MP2dArrayGrid >> size [ 
 	^ totalRows * totalColumns 
 ]
