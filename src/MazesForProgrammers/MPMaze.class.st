@@ -55,18 +55,6 @@ MPMaze class >> fromConfiguration: aDictionary [
 	^ instance
 ]
 
-{ #category : #'instance creation' }
-MPMaze class >> mazeOf: totalRows by: totalColumns [
-
-	| grid |
-	self flag: #review. "This method might be redundant."
-	grid := Grid of: totalRows by: totalColumns.
-	grid linkingStrategy: (MPBinaryTree for: grid).
-	grid linkCells.
-	grid displayStringOn: Transcript.
-	Transcript flush
-]
-
 { #category : #accessing }
 MPMaze >> grid [
 
