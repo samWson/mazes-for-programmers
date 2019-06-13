@@ -73,3 +73,9 @@ MPMaze >> printAscii [
 	grid displayStringOn:Transcript.
 	Transcript flush
 ]
+
+{ #category : #printing }
+MPMaze >> writePNG [
+
+	MPMazeImage for: grid
+]

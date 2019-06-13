@@ -64,7 +64,7 @@ MPMazeImageTest >> testAdvancePointer [
 MPMazeImageTest >> testAdvancePointerPastXExtent [
 
 	| expected actual xExtent |
-	xExtent := extent x - 1.
+	xExtent := extent x.
 	expected := 0 @ (instance position y + 1).
 	xExtent + 1 timesRepeat: [ instance advancePointer ].
 	actual := instance position.
@@ -83,7 +83,7 @@ MPMazeImageTest >> testAtXExtentFalse [
 MPMazeImageTest >> testAtXExtentTrue [
 
 	| xExtent |
-	xExtent := extent x - 1.
+	xExtent := extent x.
 	xExtent timesRepeat: [ instance advancePointer ].
 	self assert: instance atXExtent equals: true
 		

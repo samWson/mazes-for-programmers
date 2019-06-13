@@ -9,6 +9,11 @@ I create pixel based image files using a raster algorithm. The files will be
 named `maze.png` and will be in the same directory as the IDE image is being 
 run from. New images will overwrite an older image.
 
+To see the directory path where the image file will be run this code:
+```
+Smalltalk imageDirectory.
+```
+
 ### Drawing Implementation
 
 From the start the northern and western maze boundaries are drawn leaving the
@@ -223,7 +228,7 @@ MPMazeImage >> writeCellRow: aCell [
 	aCell
 		ifNil: [ self writePixel ]
 		ifNotNil: [ 
-			(aCell linked: aCell east)
+			(grid class linkedEast: aCell)
 				ifFalse: [ self writePixel ] 
 				]
 ]
@@ -242,7 +247,7 @@ MPMazeImage >> writeCellSouthBoundary: aCell [
 				] 
 			] 
 		ifNotNil: [ 
-			(aCell linked: aCell south) 
+			(grid class linkedSouth: aCell)
 				ifTrue: [ 
 					self cellBodySize timesRepeat: [ 
 						self advancePointer.
