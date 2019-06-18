@@ -294,6 +294,6 @@ MP2dArrayGridTest >> testTopBoundaryOn [
 	grid4x4 class topBoundaryOn: asciiDisplayStream length: grid4x4 totalColumns.
 	
 	actual := asciiDisplayStream contents.
-	
+
 	self assert: actual equals: expected  
 ]

@@ -243,8 +243,34 @@ MPGrid >> atNorthBoundary: aPoint [
 { #category : #displaying }
 MPGrid >> displayStringOn: aStream [
 
+	| outputStream |
 	self flag: #review. "What if we used stacks instead of streams for doing the ascii art? Also what if MPGrid>>#eachRows returned a Stack?"
-	self subclassResponsibility
+	self flag: #todo. "This functionality might be worth extracting into a trait."
+	outputStream := String new writeStream.
+	self class topBoundaryOn: outputStream length: totalColumns.
+
+	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
+		topHalfStream := String new writeStream.
+		bottomHalfStream := String new writeStream.
+		topHalf := '|'.
+		bottomHalf := '+'.
+		topHalfStream << topHalf.
+		bottomHalfStream << bottomHalf.
+
+		row do: [ :cell |
+			self class cellTopOn: topHalfStream for: cell.
+			self class cellBottomOn: bottomHalfStream for: cell.
+			].
+
+		topHalfStream cr.
+		bottomHalfStream cr.
+		
+		outputStream 
+			<< topHalfStream contents;
+			<< bottomHalfStream contents.
+		 ].
+	
+	outputStream contents displayStringOn: aStream
 ]
 
 { #category : #contents }

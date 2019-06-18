@@ -192,38 +192,6 @@ MPBitfieldGrid >> directionFrom: aPoint to: aNeighboringPoint [
 	^ self cardinalDirectionOfIndex: index
 ]
 
-{ #category : #displaying }
-MPBitfieldGrid >> displayStringOn: aStream [
-
-	| outputStream |
-	self flag: #todo. "This functionality might be worth extracting into a trait."
-	outputStream := String new writeStream.
-	self class topBoundaryOn: outputStream length: totalColumns.
-
-	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
-		topHalfStream := String new writeStream.
-		bottomHalfStream := String new writeStream.
-		topHalf := '|'.
-		bottomHalf := '+'.
-		topHalfStream << topHalf.
-		bottomHalfStream << bottomHalf.
-
-		row do: [ :cell |
-			self class cellTopOn: topHalfStream for: cell.
-			self class cellBottomOn: bottomHalfStream for: cell.
-			].
-
-		topHalfStream cr.
-		bottomHalfStream cr.
-		
-		outputStream 
-			<< topHalfStream contents;
-			<< bottomHalfStream contents.
-		 ].
-	
-	outputStream contents displayStringOn: aStream
-]
-
 { #category : #contents }
 MPBitfieldGrid >> eachRow [
 
