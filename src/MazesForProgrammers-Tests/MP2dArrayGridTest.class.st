@@ -67,90 +67,6 @@ MP2dArrayGridTest >> testAtNorthBoundaryTrue [
 ]
 
 { #category : #tests }
-MP2dArrayGridTest >> testCellBottomOnForLinked [
-
-	| expected actual |
-	firstCell south: secondCell.
-	firstCell link: secondCell.
-	expected := subjectClass linkedHorizontalCellBoundary , subjectClass cellCorner.
-	
-	grid4x4 class cellBottomOn: asciiDisplayStream for: firstCell.
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected 
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testCellBottomOnForNil [
-
-	| expected actual |
-	expected := subjectClass unlinkedHorizontalCellBoundary , subjectClass cellCorner.
-	
-	grid4x4 class cellBottomOn: asciiDisplayStream for: nil.
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected 
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testCellBottomOnForUnlinked [
-
-	| expected actual |
-	firstCell south: secondCell.	
-	expected := subjectClass unlinkedHorizontalCellBoundary , subjectClass cellCorner.
-	
-	grid4x4 class cellBottomOn: asciiDisplayStream for: firstCell.
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected 
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testCellTopOnForLinked [
-	
-	| expected actual |
-	firstCell east: secondCell.
-	firstCell link: secondCell.
-	
-	expected := subjectClass cellBody , subjectClass linkedVerticalCellBoundary.
-	
-	grid4x4 class cellTopOn: asciiDisplayStream for: firstCell.
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected 
-	
-	
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testCellTopOnForNil [
-
-	| expected actual |
-	expected := subjectClass cellBody , subjectClass unlinkedVerticalCellBoundary.
-	
-	grid4x4 class cellTopOn: asciiDisplayStream for: nil.
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected 
-	
-	
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testCellTopOnForUnlinked [
-
-	| expected actual |
-	firstCell east: secondCell.
-	expected := subjectClass cellBody , subjectClass unlinkedVerticalCellBoundary.
-	
-	grid4x4 class cellTopOn: asciiDisplayStream for: firstCell.
-	
-	actual := asciiDisplayStream contents.
-	
-	self assert: actual equals: expected
-]
-
-{ #category : #tests }
 MP2dArrayGridTest >> testEachCell [
 	| grid actual allAreCells |
 	grid := MP2dArrayGrid of: 2 by: 2.
@@ -284,16 +200,4 @@ MP2dArrayGridTest >> testSignalIfOutOfBoundsSignalException [
 	self 
 		should: [ grid4x4 signalIfOutOfBounds: outOfMinBounds ]
 		raise: OutOfGridBounds
-]
-
-{ #category : #tests }
-MP2dArrayGridTest >> testTopBoundaryOn [
-	| expected actual |
-	expected := subjectClass cellCorner , (subjectClass horizontalCellBoundary repeat: grid4x4 totalColumns) , Character cr asString.
-	
-	grid4x4 class topBoundaryOn: asciiDisplayStream length: grid4x4 totalColumns.
-	
-	actual := asciiDisplayStream contents.
-
-	self assert: actual equals: expected  
 ]

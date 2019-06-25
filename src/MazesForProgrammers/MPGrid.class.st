@@ -22,7 +22,7 @@ I have a class method for creation of instances with a defined number of rows an
 This should be used instead of `new`. Subclasses will override this method.
 
 ```
-MPGrid of: 4 by: 4 
+MPGrid of: 4 by: 4
 ```
 
 ### Access
@@ -74,8 +74,7 @@ grid atNorthBoundary: 3@3.
 ### Printing
 
 I override `#displayStringOn:` to allow an ASCII art style string representation of my grid to be 
-streamed. I have a number of helper methods on my class side in the `streaming - helpers` protocol
-that are used to make up the individual components of my grid in string form. 
+streamed. Building of the string is delegated to instances of `MPMazeAsString`.
 
 ```
 grid displayStringOn: Transcript. ""Or any other stream object.""
@@ -106,91 +105,13 @@ Class {
 		'totalRows',
 		'linkingStrategy'
 	],
-	#classVars : [
-		'CellBody',
-		'CellCorner',
-		'HorizontalCellBoundary',
-		'LinkedHorizontalCellBoundary',
-		'LinkedVerticalCellBoundary',
-		'UnlinkedHorizontalCellBoundary',
-		'UnlinkedVerticalCellBoundary'
-	],
 	#category : #MazesForProgrammers
 }
-
-{ #category : #constants }
-MPGrid class >> cellBody [
-	^ CellBody 
-]
-
-{ #category : #'streaming - helpers' }
-MPGrid class >> cellBottomOn: aWriteStream for: aCell [
-	
-	| southCellBoundary |
-	southCellBoundary := aCell 
-		ifNil: [ self unlinkedHorizontalCellBoundary ]
-		ifNotNil: [ 
-			(self linkedSouth: aCell) 
-				ifTrue: [ self linkedHorizontalCellBoundary ] 
-				ifFalse: [ self unlinkedHorizontalCellBoundary ] 
-			].
-		
-	aWriteStream
-		<< southCellBoundary;
-		<< self cellCorner.
-]
-
-{ #category : #constants }
-MPGrid class >> cellCorner [
-	^ CellCorner 
-]
-
-{ #category : #'streaming - helpers' }
-MPGrid class >> cellTopOn: aWriteStream for: aCell [
-	"Write the ASCII representation of the top half of aCell to aWriteStream."
-	
-	| eastCellBoundry |
-	eastCellBoundry := aCell
-		ifNil: [ self unlinkedVerticalCellBoundary ]
-		ifNotNil: [
-			(self linkedEast: aCell) 
-				ifTrue: [ self linkedVerticalCellBoundary ] 
-				ifFalse: [ self unlinkedVerticalCellBoundary ] 
-			].
-	
-	aWriteStream
-		<< self cellBody;
-		<< eastCellBoundry.
-]
-
-{ #category : #constants }
-MPGrid class >> horizontalCellBoundary [
-	^ HorizontalCellBoundary 
-]
-
-{ #category : #'class initialization' }
-MPGrid class >> initialize [
-
-	CellBody := Character space asString repeat: 3.
-	CellCorner := '+'.
-	HorizontalCellBoundary := '---+'. 
-	LinkedVerticalCellBoundary := Character space asString.
-	UnlinkedVerticalCellBoundary := '|'.
-	UnlinkedHorizontalCellBoundary := '---'.
-	LinkedHorizontalCellBoundary := Character space asString repeat: 3
-	
-	
-]
 
 { #category : #testing }
 MPGrid class >> linkedEast: aCell [
 
 	self subclassResponsibility 
-]
-
-{ #category : #constants }
-MPGrid class >> linkedHorizontalCellBoundary [
-	^ LinkedHorizontalCellBoundary 
 ]
 
 { #category : #testing }
@@ -199,33 +120,10 @@ MPGrid class >> linkedSouth: aCell [
 	self subclassResponsibility 
 ]
 
-{ #category : #constants }
-MPGrid class >> linkedVerticalCellBoundary [
-	^ LinkedVerticalCellBoundary 
-]
-
 { #category : #'instance creation' }
 MPGrid class >> of: totalRows by: totalColumns [
 	
 	self subclassResponsibility 
-]
-
-{ #category : #'streaming - helpers' }
-MPGrid class >> topBoundaryOn: aWriteStream length: totalColumns [
-	aWriteStream
-		nextPutAll: self cellCorner;
-		nextPutAll: (self horizontalCellBoundary repeat: totalColumns);
-		cr.
-]
-
-{ #category : #constants }
-MPGrid class >> unlinkedHorizontalCellBoundary [
-	^ UnlinkedHorizontalCellBoundary
-]
-
-{ #category : #constants }
-MPGrid class >> unlinkedVerticalCellBoundary [
-	^ UnlinkedVerticalCellBoundary 
 ]
 
 { #category : #testing }
@@ -243,34 +141,10 @@ MPGrid >> atNorthBoundary: aPoint [
 { #category : #displaying }
 MPGrid >> displayStringOn: aStream [
 
-	| outputStream |
-	self flag: #review. "What if we used stacks instead of streams for doing the ascii art? Also what if MPGrid>>#eachRows returned a Stack?"
-	self flag: #todo. "This functionality might be worth extracting into a trait."
-	outputStream := String new writeStream.
-	self class topBoundaryOn: outputStream length: totalColumns.
-
-	self eachRow do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
-		topHalfStream := String new writeStream.
-		bottomHalfStream := String new writeStream.
-		topHalf := '|'.
-		bottomHalf := '+'.
-		topHalfStream << topHalf.
-		bottomHalfStream << bottomHalf.
-
-		row do: [ :cell |
-			self class cellTopOn: topHalfStream for: cell.
-			self class cellBottomOn: bottomHalfStream for: cell.
-			].
-
-		topHalfStream cr.
-		bottomHalfStream cr.
-		
-		outputStream 
-			<< topHalfStream contents;
-			<< bottomHalfStream contents.
-		 ].
-	
-	outputStream contents displayStringOn: aStream
+	| stringBuilder |
+	stringBuilder := MPMazeAsString newFrom: self.
+	stringBuilder build.
+	stringBuilder contents displayStringOn: aStream
 ]
 
 { #category : #contents }

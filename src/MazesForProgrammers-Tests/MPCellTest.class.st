@@ -8,7 +8,7 @@ I am the TestCase for `MPCell`.
 A variety of `MPCell` instances are provided for testing.
 "
 Class {
-	#name : #CellTest,
+	#name : #MPCellTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'firstCell',
@@ -21,7 +21,7 @@ Class {
 }
 
 { #category : #running }
-CellTest >> setUp [
+MPCellTest >> setUp [
 	super setUp.
 	firstCell := MPCell new.
 	secondCell := MPCell new.
@@ -35,7 +35,7 @@ CellTest >> setUp [
 ]
 
 { #category : #tests }
-CellTest >> testLink [
+MPCellTest >> testLink [
 	| actual |	
 	actual := firstCell link: secondCell.
 	
@@ -45,7 +45,7 @@ CellTest >> testLink [
 ]
 
 { #category : #tests }
-CellTest >> testLinkBidirectional [
+MPCellTest >> testLinkBidirectional [
 	| actual |
 	actual := firstCell link: secondCell bidirectional: false.
 	
@@ -55,7 +55,7 @@ CellTest >> testLinkBidirectional [
 ]
 
 { #category : #tests }
-CellTest >> testLinked [
+MPCellTest >> testLinked [
 	| linkedActual unlinkedActual |
 	firstCell link: secondCell.
 	
@@ -70,7 +70,7 @@ CellTest >> testLinked [
 ]
 
 { #category : #tests }
-CellTest >> testNeighbours [
+MPCellTest >> testNeighbours [
 	| actual expected |
 	expected := { northCell. eastCell. }.
 	actual := cellWithNeighbours neighbours.
@@ -80,7 +80,7 @@ CellTest >> testNeighbours [
 ]
 
 { #category : #tests }
-CellTest >> testUnlink [
+MPCellTest >> testUnlink [
 	| actual |
 	firstCell link: secondCell.
 	actual := firstCell unlink: secondCell.
@@ -91,7 +91,7 @@ CellTest >> testUnlink [
 ]
 
 { #category : #tests }
-CellTest >> testUnlinkBidirectional [
+MPCellTest >> testUnlinkBidirectional [
 	| actual |
 	firstCell link: secondCell.
 	actual := firstCell unlink: secondCell bidirectional: false.
