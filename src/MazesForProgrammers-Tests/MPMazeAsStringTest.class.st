@@ -37,6 +37,39 @@ MPMazeAsStringTest >> setUp [
 ]
 
 { #category : #tests }
+MPMazeAsStringTest >> testBuild [
+
+	| actual centerLink expected maze stringBuilder |
+	self flag: #fixme. "Once MPMazeAsString is cleaned up a bit look at deleting the streaming helper methods and moving all the setup of this method into #setUp"
+	maze := MP2dArrayGrid of: 4 by: 4.
+	centerLink := 1@1.
+	maze 
+		link: 1@0 to: centerLink;
+		link: 0@1 to: centerLink;
+		link: 2@1 to: centerLink;
+		link: 1@2 to: centerLink.
+	expected := 
+'+---+---+---+---+
+|   |   |   |   |
++---+   +---+---+
+|           |   |
++---+   +---+---+
+|   |   |   |   |
++---+---+---+---+
+|   |   |   |   |
++---+---+---+---+
+'.
+
+	self flag: #fixme. "This is printed upsidedown. 0,0 starts at the top left. x axis goes from top to bottom, y axis goes from left to right. This is really confusing and needs to be fixed."
+	
+	stringBuilder := subjectClass newFrom: maze.
+	stringBuilder build.
+	actual := stringBuilder contents.
+	
+	self assert: actual equals: expected
+]
+
+{ #category : #tests }
 MPMazeAsStringTest >> testCellBottomOnForLinked [
 
 	| expected actual |
