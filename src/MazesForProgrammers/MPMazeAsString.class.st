@@ -27,6 +27,10 @@ stringBuilder contents.
 	and returned from.
 - rows: A multidimensional collection representing the contents of a maze 
 	where each element in the collection is a row of cells.
+- topHalfStream: A `WriteStream`, the top half of a row of cells is written
+	to this and then added to the outputStream.
+- bottomHalfStrea: A `WriteStream`, the bottom half of a row of cells is written
+	to this and then added to the outputStrea.
 "
 Class {
 	#name : #MPMazeAsString,
@@ -34,7 +38,9 @@ Class {
 	#instVars : [
 		'outputStream',
 		'rows',
-		'grid'
+		'grid',
+		'topHalfStream',
+		'bottomHalfStream'
 	],
 	#classVars : [
 		'CellBody',
@@ -116,65 +122,22 @@ MPMazeAsString class >> unlinkedVerticalCellBoundary [
 
 { #category : #building }
 MPMazeAsString >> build [
-
-	outputStream := String new writeStream.
-	self topBoundaryOn: outputStream length: self totalColumns.
-
-	rows do: [ :row | | topHalf bottomHalf topHalfStream bottomHalfStream |
-		topHalfStream := String new writeStream.
-		bottomHalfStream := String new writeStream.
-		topHalf := '|'.
-		bottomHalf := '+'.
-		topHalfStream << topHalf.
-		bottomHalfStream << bottomHalf.
-
-		row do: [ :cell |
-			self cellTopOn: topHalfStream for: cell.
-			self cellBottomOn: bottomHalfStream for: cell.
-			].
-
-		topHalfStream cr.
-		bottomHalfStream cr.
+	self streamTopBoundary.
+	
+	rows do: [ :row | 
+		self initializeStreamsForRow.
 		
-		outputStream 
-			<< topHalfStream contents;
-			<< bottomHalfStream contents.
-		 ].
-]
-
-{ #category : #'streaming - helpers' }
-MPMazeAsString >> cellBottomOn: aWriteStream for: aCell [
-	
-	| southCellBoundary |
-	southCellBoundary := aCell 
-		ifNil: [ self class unlinkedHorizontalCellBoundary ]
-		ifNotNil: [ 
-			(grid class linkedSouth: aCell) 
-				ifTrue: [ self class linkedHorizontalCellBoundary ] 
-				ifFalse: [ self class unlinkedHorizontalCellBoundary ] 
+		row do: [ :cell | 
+			self streamUpperHalfOf: cell.
+			self streamLowerHalfOf: cell. 
 			].
-		
-	aWriteStream
-		<< southCellBoundary;
-		<< self class cellCorner.
-]
 
-{ #category : #'streaming - helpers' }
-MPMazeAsString >> cellTopOn: aWriteStream for: aCell [
-	"Write the ASCII representation of the top half of aCell to aWriteStream."
-	
-	| eastCellBoundry |
-	eastCellBoundry := aCell
-		ifNil: [ self class unlinkedVerticalCellBoundary ]
-		ifNotNil: [
-			(grid class linkedEast: aCell)
-				ifTrue: [ self class linkedVerticalCellBoundary ] 
-				ifFalse: [ self class unlinkedVerticalCellBoundary ] 
-			].
-	
-	aWriteStream
-		<< self class cellBody;
-		<< eastCellBoundry.
+			self streamCarriageReturns.
+			
+			outputStream
+				<< topHalfStream contents;
+				<< bottomHalfStream contents. 
+				]
 ]
 
 { #category : #accessing }
@@ -187,6 +150,18 @@ MPMazeAsString >> contents [
 MPMazeAsString >> grid: anMPGrid [
 
 	grid := anMPGrid
+]
+
+{ #category : #'streaming - helpers' }
+MPMazeAsString >> initializeStreamsForRow [
+
+	| bottomHalf topHalf |
+	topHalfStream := String new writeStream.
+	bottomHalfStream := String new writeStream.
+	topHalf := '|'.
+	bottomHalf := '+'.
+	topHalfStream << topHalf.
+	bottomHalfStream << bottomHalf
 ]
 
 { #category : #accessing }
@@ -202,12 +177,53 @@ MPMazeAsString >> rows: aCollection [
 ]
 
 { #category : #'streaming - helpers' }
-MPMazeAsString >> topBoundaryOn: aWriteStream length: totalColumns [
+MPMazeAsString >> streamCarriageReturns [
 
-	aWriteStream
-		nextPutAll: self class cellCorner;
-		nextPutAll: (self class horizontalCellBoundary repeat: totalColumns);
+	topHalfStream cr.
+	bottomHalfStream cr
+]
+
+{ #category : #'streaming - helpers' }
+MPMazeAsString >> streamLowerHalfOf: aCell [
+
+	| southCellBoundary |
+	southCellBoundary := aCell 
+		ifNil: [ self class unlinkedHorizontalCellBoundary ]
+		ifNotNil: [ 
+			(grid class linkedSouth: aCell) 
+				ifTrue: [ self class linkedHorizontalCellBoundary ] 
+				ifFalse: [ self class unlinkedHorizontalCellBoundary ] 
+			].
+		
+	bottomHalfStream
+		<< southCellBoundary;
+		<< self class cellCorner.
+]
+
+{ #category : #'streaming - helpers' }
+MPMazeAsString >> streamTopBoundary [
+
+	outputStream
+		<< self class cellCorner;
+		<< (self class horizontalCellBoundary repeat: self totalColumns);
 		cr.
+]
+
+{ #category : #'streaming - helpers' }
+MPMazeAsString >> streamUpperHalfOf: aCell [
+	
+	| eastCellBoundry |
+	eastCellBoundry := aCell
+		ifNil: [ self class unlinkedVerticalCellBoundary ]
+		ifNotNil: [
+			(grid class linkedEast: aCell)
+				ifTrue: [ self class linkedVerticalCellBoundary ] 
+				ifFalse: [ self class unlinkedVerticalCellBoundary ] 
+			].
+	
+	topHalfStream
+		<< self class cellBody;
+		<< eastCellBoundry
 ]
 
 { #category : #accessing }
