@@ -42,7 +42,7 @@ MPBitfieldGridTest >> testLinkToSignalsNotANeighbor [
 	
 	action := [ instance link: point to: nonNeighborPoint ].
 	
-	self should: action raise: NotANeighbor
+	self should: action raise: MPNotANeighbor
 ]
 
 { #category : #tests }
@@ -54,7 +54,7 @@ MPBitfieldGridTest >> testLinkToSignalsOutOfBounds [
 	
 	action := [ instance link: point to: outOfBoundsPoint ].
 	
-	self should: action raise: OutOfGridBounds  
+	self should: action raise: MPOutOfGridBounds  
 ]
 
 { #category : #tests }
@@ -132,7 +132,7 @@ MPBitfieldGridTest >> testLinkedToSignalsNotANeighbor [
 	
 	action := [ instance linked: point to: nonNeighborPoint ].
 	
-	self should: action raise: NotANeighbor
+	self should: action raise: MPNotANeighbor
 ]
 
 { #category : #tests }
@@ -144,7 +144,7 @@ MPBitfieldGridTest >> testLinkedToSignalsOutOfBounds [
 	
 	action := [ instance linked: point to: outOfBoundsPoint ].
 	
-	self should: action raise: OutOfGridBounds  
+	self should: action raise: MPOutOfGridBounds  
 ]
 
 { #category : #'tests - dependencies' }

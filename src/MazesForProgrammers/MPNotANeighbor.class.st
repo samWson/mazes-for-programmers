@@ -1,5 +1,5 @@
 "
-# NotANeighbor
+# MPNotANeighbor
 
 I am an exception. I am used when an operation is made on a subject point
 and second point where the second point is not a neighbor of the subject
@@ -13,7 +13,7 @@ as defined by Point>>#fourNeighbors.
 - neighbors: The neighboring points of the subject point.
 "
 Class {
-	#name : #NotANeighbor,
+	#name : #MPNotANeighbor,
 	#superclass : #Error,
 	#instVars : [
 		'subjectPoint',
@@ -24,37 +24,37 @@ Class {
 }
 
 { #category : #accessing }
-NotANeighbor >> exceptionalPoint [
+MPNotANeighbor >> exceptionalPoint [
 
 	^ exceptionalPoint
 ]
 
 { #category : #accessing }
-NotANeighbor >> exceptionalPoint: aPoint [
+MPNotANeighbor >> exceptionalPoint: aPoint [
 
 	exceptionalPoint := aPoint
 ]
 
 { #category : #accessing }
-NotANeighbor >> neighbors [
+MPNotANeighbor >> neighbors [
 
 	^ neighbors
 ]
 
 { #category : #accessing }
-NotANeighbor >> neighbors: aCollection [
+MPNotANeighbor >> neighbors: aCollection [
 
 	neighbors := aCollection
 ]
 
 { #category : #accessing }
-NotANeighbor >> subjectPoint [
+MPNotANeighbor >> subjectPoint [
 
 	^ subjectPoint
 ]
 
 { #category : #accessing }
-NotANeighbor >> subjectPoint: aPoint [
+MPNotANeighbor >> subjectPoint: aPoint [
 
 	subjectPoint := aPoint
 ]

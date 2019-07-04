@@ -280,7 +280,7 @@ MPBitfieldGrid >> signalIf: aNeighboringPoint NotANeighborOf: aPoint [
 	
 	(neighbors includes: aNeighboringPoint)
 		ifFalse: [ 
-			NotANeighbor new
+			MPNotANeighbor new
 				subjectPoint: aPoint;
 				exceptionalPoint: aNeighboringPoint;
 				neighbors: neighbors;

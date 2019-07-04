@@ -51,8 +51,8 @@ MPBinaryTree >> neighborsOf: aPoint [
 
 	| neighbors |
 	neighbors := LinkedList new.
-	[ neighbors add: (grid northNeighbourOf: aPoint) ] on: OutOfGridBounds do: [ :ex | ex return ].
-	[ neighbors add: (grid eastNeighbourOf: aPoint) ] on: OutOfGridBounds do: [ :ex | ex return ].
+	[ neighbors add: (grid northNeighbourOf: aPoint) ] on: MPOutOfGridBounds do: [ :ex | ex return ].
+	[ neighbors add: (grid eastNeighbourOf: aPoint) ] on: MPOutOfGridBounds do: [ :ex | ex return ].
 
 	^ neighbors
 ]

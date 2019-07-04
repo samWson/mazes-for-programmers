@@ -183,7 +183,7 @@ MP2dArrayGridTest >> testSignalIfOutOfBoundsNoException [
 
 	self
 		shouldnt: [ grid4x4 signalIfOutOfBounds: inBoundsCoordinate ]
-		raise: OutOfGridBounds
+		raise: MPOutOfGridBounds
 ]
 
 { #category : #tests }
@@ -195,9 +195,9 @@ MP2dArrayGridTest >> testSignalIfOutOfBoundsSignalException [
 
 	self
 		should: [ grid4x4 signalIfOutOfBounds: outOfMaxBounds ]
-		raise: OutOfGridBounds.
+		raise: MPOutOfGridBounds.
 		
 	self 
 		should: [ grid4x4 signalIfOutOfBounds: outOfMinBounds ]
-		raise: OutOfGridBounds
+		raise: MPOutOfGridBounds
 ]

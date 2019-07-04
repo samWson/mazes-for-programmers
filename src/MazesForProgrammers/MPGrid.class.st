@@ -7,8 +7,10 @@ defined by subclasses.
 
 ## Colaborators
 
-I use OutOfGridBounds as an exception when an attempt to access a coordinate 
+I use `MPOutOfGridBounds` as an exception when an attempt to access a coordinate 
 outside my boundaries is made.
+
+Making a string representation of myself is delegated to `MPMazeAsString`.
 
 ### Linking Strategy
 
@@ -29,7 +31,7 @@ MPGrid of: 4 by: 4
 
 I make use of instances of `Point` to access the cells of my grid. The x and y coordinates of the
 `Point` instance match the cell of the same position. The first poisition is `0@0` so the grid
-can be considered zero indexed. An `OutOfGridBounds exception is signaled if an attempt is made
+can be considered zero indexed. An `MPOutOfGridBounds` exception is signaled if an attempt is made
 to access coordinates outside the grid.
 
 ```
@@ -226,7 +228,7 @@ MPGrid >> signalIfOutOfBounds: aPoint [
 
 	((aPoint x < 0) or: (aPoint y < 0))
 		 ifTrue: [ 
-			OutOfGridBounds new
+			MPOutOfGridBounds new
 				coordinate: aPoint;
 				minBound: 0@0;
 				maxBound: extent;
@@ -235,7 +237,7 @@ MPGrid >> signalIfOutOfBounds: aPoint [
 		
 	((aPoint x > extent x) or: (aPoint y > extent y))
 		ifTrue: [ 
-			OutOfGridBounds new
+			MPOutOfGridBounds new
 				coordinate: aPoint;
 				minBound: 0@0;
 				maxBound: extent;

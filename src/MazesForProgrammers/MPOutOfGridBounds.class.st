@@ -1,5 +1,5 @@
 "
-# OutOfGridBounds
+# MPOutOfGridBounds
 
 I am an exception to be used when an attempt to access a coordinate outside the 
 boundaries of a grid is made.
@@ -11,7 +11,7 @@ boundaries of a grid is made.
 - maxBound: The maximum allowable coordinates of the grid.
 "
 Class {
-	#name : #OutOfGridBounds,
+	#name : #MPOutOfGridBounds,
 	#superclass : #Error,
 	#instVars : [
 		'coordinate',
@@ -22,31 +22,31 @@ Class {
 }
 
 { #category : #accessing }
-OutOfGridBounds >> coordinate [
+MPOutOfGridBounds >> coordinate [
 	^ coordinate
 ]
 
 { #category : #accessing }
-OutOfGridBounds >> coordinate: anObject [
+MPOutOfGridBounds >> coordinate: anObject [
 	coordinate := anObject
 ]
 
 { #category : #accessing }
-OutOfGridBounds >> maxBound [
+MPOutOfGridBounds >> maxBound [
 	^ maxBound
 ]
 
 { #category : #accessing }
-OutOfGridBounds >> maxBound: anObject [
+MPOutOfGridBounds >> maxBound: anObject [
 	maxBound := anObject
 ]
 
 { #category : #accessing }
-OutOfGridBounds >> minBound [
+MPOutOfGridBounds >> minBound [
 	^ minBound
 ]
 
 { #category : #accessing }
-OutOfGridBounds >> minBound: anObject [
+MPOutOfGridBounds >> minBound: anObject [
 	minBound := anObject
 ]
