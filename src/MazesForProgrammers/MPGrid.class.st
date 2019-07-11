@@ -37,8 +37,8 @@ to access coordinates outside the grid.
 The first postition of the grid, `0@0`, starts at the top left corner as the user is looking at it.
 An increase in the x axis moves the position to the right, or east, across the grid. An increase
 to the y axis moves the position down, or south, across the grid. This design was chosen to aid
-string building of the maze so it can be a series of appended strings. This may also keep in 
-convention with existing computer graphic drawing conventions.
+string building of the maze so it can be a series of appended strings. It also follows the 
+convetion of the `Form` class which is used for writing image files.
 
 ```
 grid eastNeighbourOf: 2@2.
