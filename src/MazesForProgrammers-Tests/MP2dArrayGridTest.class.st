@@ -47,7 +47,7 @@ MP2dArrayGridTest >> testAtEastBoundaryTrue [
 ]
 
 { #category : #tests }
-MP2dArrayGridTest >> testAtNorthBoundaryFalse [
+MP2dArrayGridTest >> testAtSouthBoundaryFalse [
 
 	| coordinate actual |
 	coordinate := 0@2.
@@ -57,7 +57,7 @@ MP2dArrayGridTest >> testAtNorthBoundaryFalse [
 ]
 
 { #category : #tests }
-MP2dArrayGridTest >> testAtNorthBoundaryTrue [
+MP2dArrayGridTest >> testAtSouthBoundaryTrue [
 
 	| coordinate actual |
 	coordinate := 0@3.
@@ -134,16 +134,6 @@ MP2dArrayGridTest >> testLinkedSouthTrue [
 ]
 
 { #category : #tests }
-MP2dArrayGridTest >> testNorthNeighbourOf [
-
-	| coordinate expected actual |
-	coordinate := 2@2.
-	expected := 2@3.
-	actual := grid4x4 southNeighborOf: coordinate.
-	self assert: actual equals: expected
-]
-
-{ #category : #tests }
 MP2dArrayGridTest >> testOfByRectangularGrid [
 	| numberOfRows numberOfColumns grid totalCells correctNumberOfRows correctNumberOfColumns |
 	numberOfRows := 3.
@@ -200,4 +190,14 @@ MP2dArrayGridTest >> testSignalIfOutOfBoundsSignalException [
 	self 
 		should: [ grid4x4 signalIfOutOfBounds: outOfMinBounds ]
 		raise: MPOutOfGridBounds
+]
+
+{ #category : #tests }
+MP2dArrayGridTest >> testSouthNeighborOf [
+
+	| coordinate expected actual |
+	coordinate := 2@2.
+	expected := 2@3.
+	actual := grid4x4 southNeighborOf: coordinate.
+	self assert: actual equals: expected
 ]
