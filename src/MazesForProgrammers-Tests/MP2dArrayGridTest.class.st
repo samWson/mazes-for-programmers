@@ -51,7 +51,7 @@ MP2dArrayGridTest >> testAtNorthBoundaryFalse [
 
 	| coordinate actual |
 	coordinate := 0@2.
-	actual := grid4x4 atNorthBoundary: coordinate.
+	actual := grid4x4 atSouthBoundary: coordinate.
 	
 	self deny: actual
 ]
@@ -61,7 +61,7 @@ MP2dArrayGridTest >> testAtNorthBoundaryTrue [
 
 	| coordinate actual |
 	coordinate := 0@3.
-	actual := grid4x4 atNorthBoundary: coordinate.
+	actual := grid4x4 atSouthBoundary: coordinate.
 	
 	self assert: actual
 ]
@@ -84,7 +84,7 @@ MP2dArrayGridTest >> testEastNeighbourOf [
 	| coordinate expected actual |
 	coordinate := 2@2.
 	expected := 3@2.
-	actual := grid4x4 eastNeighbourOf: coordinate.
+	actual := grid4x4 eastNeighborOf: coordinate.
 	self assert: actual equals: expected
 ]
 
@@ -139,7 +139,7 @@ MP2dArrayGridTest >> testNorthNeighbourOf [
 	| coordinate expected actual |
 	coordinate := 2@2.
 	expected := 2@3.
-	actual := grid4x4 northNeighbourOf: coordinate.
+	actual := grid4x4 southNeighborOf: coordinate.
 	self assert: actual equals: expected
 ]
 

@@ -34,6 +34,12 @@ I make use of instances of `Point` to access the cells of my grid. The x and y c
 can be considered zero indexed. An `MPOutOfGridBounds` exception is signaled if an attempt is made
 to access coordinates outside the grid.
 
+The first postition of the grid, `0@0`, starts at the top left corner as the user is looking at it.
+An increase in the x axis moves the position to the right, or east, across the grid. An increase
+to the y axis moves the position down, or south, across the grid. This design was chosen to aid
+string building of the maze so it can be a series of appended strings. This may also keep in 
+convention with existing computer graphic drawing conventions.
+
 ```
 grid eastNeighbourOf: 2@2.
 ```
@@ -80,6 +86,15 @@ streamed. Building of the string is delegated to instances of `MPMazeAsString`.
 
 ```
 grid displayStringOn: Transcript. ""Or any other stream object.""
+```
+
+### Contents
+
+The method `#eachRow` will return a collection where each element is one row of the grid.
+The first element of the first row should be the cell at position `0@0` of the grid.
+
+```
+grid eachRow. ""A collection of rows.""
 ```
 
 ## Instance Variables
@@ -135,8 +150,8 @@ MPGrid >> atEastBoundary: aPoint [
 ]
 
 { #category : #testing }
-MPGrid >> atNorthBoundary: aPoint [ 
-	
+MPGrid >> atSouthBoundary: aPoint [ 
+
 	^ (aPoint y) = (extent y)
 ]
 
@@ -156,13 +171,13 @@ MPGrid >> eachRow [
 ]
 
 { #category : #accessing }
-MPGrid >> eastNeighbourOf: aPoint [ 
+MPGrid >> eastNeighborOf: aPoint [ 
 	
-	| eastNeighbour |
+	| eastNeighbor |
 	self signalIfOutOfBounds: aPoint.
-	eastNeighbour := (aPoint x + 1) @ (aPoint y).
-	self signalIfOutOfBounds: eastNeighbour. 
-	^ eastNeighbour
+	eastNeighbor := (aPoint x + 1) @ (aPoint y).
+	self signalIfOutOfBounds: eastNeighbor. 
+	^ eastNeighbor
 ]
 
 { #category : #accessing }
@@ -213,16 +228,6 @@ MPGrid >> linkingStrategy: anMPLinkingAlgorithm [
 	linkingStrategy := anMPLinkingAlgorithm
 ]
 
-{ #category : #accessing }
-MPGrid >> northNeighbourOf: aPoint [ 
-
-	| northNeighbour |
-	self signalIfOutOfBounds: aPoint.
-	northNeighbour := (aPoint x) @ (aPoint y + 1).
-	self signalIfOutOfBounds: northNeighbour.
-	^ northNeighbour
-]
-
 { #category : #signaling }
 MPGrid >> signalIfOutOfBounds: aPoint [ 
 
@@ -243,6 +248,16 @@ MPGrid >> signalIfOutOfBounds: aPoint [
 				maxBound: extent;
 				signal
 			 ]
+]
+
+{ #category : #accessing }
+MPGrid >> southNeighborOf: aPoint [ 
+
+	| northNeighbor |
+	self signalIfOutOfBounds: aPoint.
+	northNeighbor := (aPoint x) @ (aPoint y + 1).
+	self signalIfOutOfBounds: northNeighbor.
+	^ northNeighbor
 ]
 
 { #category : #accessing }

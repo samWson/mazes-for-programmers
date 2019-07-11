@@ -194,7 +194,7 @@ MPMazeAsString >> streamLowerHalfOf: aCell [
 				ifTrue: [ self class linkedHorizontalCellBoundary ] 
 				ifFalse: [ self class unlinkedHorizontalCellBoundary ] 
 			].
-		
+
 	bottomHalfStream
 		<< southCellBoundary;
 		<< self class cellCorner.
@@ -220,7 +220,7 @@ MPMazeAsString >> streamUpperHalfOf: aCell [
 				ifTrue: [ self class linkedVerticalCellBoundary ] 
 				ifFalse: [ self class unlinkedVerticalCellBoundary ] 
 			].
-	
+
 	topHalfStream
 		<< self class cellBody;
 		<< eastCellBoundry

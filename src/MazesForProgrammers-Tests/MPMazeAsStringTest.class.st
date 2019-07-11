@@ -23,7 +23,7 @@ MPMazeAsStringTest >> setUp [
 
 	| centerLink |
 	super setUp.
-	grid4x4 := MP2dArrayGrid of: 4 by: 4.
+	grid4x4 := MPBitfieldGrid of: 4 by: 4.
 	
 	centerLink := 1@1.
 	
@@ -43,8 +43,7 @@ MPMazeAsStringTest >> setUp [
 +---+---+---+---+
 |   |   |   |   |
 +---+---+---+---+
-'.
-	self flag: #fixme. "This is printed upsidedown. 0,0 starts at the top left. x axis goes from top to bottom, y axis goes from left to right. This is really confusing and needs to be fixed."
+'
 ]
 
 { #category : #tests }

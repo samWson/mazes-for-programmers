@@ -109,13 +109,13 @@ MPBitfieldGrid class >> east [
 { #category : #'class initialization' }
 MPBitfieldGrid class >> initialize [
 
-	CardinalDirectionMappings := { self east. self north. self west. self south. }.
+	CardinalDirectionMappings := { self east. self south. self west. self north. }.
 	OppositeCardinatlDirections := Dictionary newFromPairs: 
 		{ 
 			self east. self west. 
 			self west. self east. 
 			self north. self south. 
-			self south. self north. 
+			self south. self north.
 		}.
 	North := 2r0001.
 	East := 2r0010.
@@ -195,13 +195,12 @@ MPBitfieldGrid >> directionFrom: aPoint to: aNeighboringPoint [
 { #category : #contents }
 MPBitfieldGrid >> eachRow [
 
-	| reversedRows cells rowLength |
+	| cells rowLength rows |
 	rowLength := totalColumns. 
 	cells := ReadStream on: grid.
-	reversedRows := Stack new.
-	[ cells atEnd ] whileFalse: [ reversedRows push: (cells next: rowLength) ].
-	^ Array newFrom: reversedRows
-	
+	rows := LinkedList new. 
+	[ cells atEnd ] whileFalse: [ rows add: (cells next: rowLength) ].
+	^ rows
 ]
 
 { #category : #mapping }

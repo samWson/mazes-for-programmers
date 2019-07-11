@@ -39,7 +39,7 @@ MPSidewinder >> advanceRun: aPoint [
 	
 	run add: aPoint.
 	atEastBoundary := grid atEastBoundary: aPoint.
-	atNorthBoundary := grid atNorthBoundary: aPoint
+	atNorthBoundary := grid atSouthBoundary: aPoint
 ]
 
 { #category : #operations }
@@ -81,14 +81,14 @@ MPSidewinder >> initialize [
 { #category : #'linking - private' }
 MPSidewinder >> linkEast: aPoint [
 
-	grid link: aPoint to: (grid eastNeighbourOf: aPoint)
+	grid link: aPoint to: (grid eastNeighborOf: aPoint)
 ]
 
 { #category : #'linking - private' }
 MPSidewinder >> linkNorth: aPoint [
 
 	| neighbour |
-	neighbour := grid northNeighbourOf: aPoint.
+	neighbour := grid southNeighborOf: aPoint.
 	neighbour ifNotNil: [ grid link: aPoint to: neighbour ]
 ]
 

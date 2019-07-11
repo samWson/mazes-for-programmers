@@ -89,12 +89,15 @@ MP2dArrayGrid >> configureCells [
 ]
 
 { #category : #contents }
-MP2dArrayGrid >> eachCell [ 
+MP2dArrayGrid >> eachCell [
+	
+	self flag: #review. "Possibly an unused method outside of tests."
 	^ self eachRow flatCollect: [ :cell | cell ifNotNil: [ cell ] ] 
 ]
 
 { #category : #contents }
 MP2dArrayGrid >> eachRow [
+
 	^ self grid do: [ :row | row ]
 ]
 
@@ -126,7 +129,7 @@ MP2dArrayGrid >> link: aPoint to: aNeighboringPoint [
 	| firstCell secondCell |
 	firstCell := self atCoordinates: aPoint.
 	secondCell := self atCoordinates: aNeighboringPoint.
-	
+
 	firstCell link: secondCell 
 ]
 

@@ -113,14 +113,13 @@ MPBitfieldGridTest >> testLinkedToNorthSouth [
 	firstCoordinate := 3@3.
 	secondCoordinate := 3@2.
 	
-	cellLinkedNorth := instance class north.
 	cellLinkedSouth := instance class south.
-	
-	instance grid at: 16 put: cellLinkedSouth.
-	instance grid at: 12 put: cellLinkedNorth.
-	
+	cellLinkedNorth := instance class north.
+
+	instance grid at: 12 put: cellLinkedSouth.
+	instance grid at: 16 put: cellLinkedNorth.
+
 	self assert: (instance linked: firstCoordinate to: secondCoordinate)
-	
 ]
 
 { #category : #tests }
@@ -152,15 +151,15 @@ MPBitfieldGridTest >> testPointFourNeighbors [
 	"Bitfield depends on the ordering of the collection returned by Point>>#fourNeighbors. This test is intended to detect breaking changes that are depended on by BitfieldGrid. A failing test here means that the ordering has changed."
 	
 	| expectedNorth expectedSouth expectedWest neighbors expectedEast |
-	expectedNorth := 2@3.
+	expectedSouth := 2@3.
 	expectedEast := 3@2.
-	expectedSouth := 2@1.
+	expectedNorth := 2@1.
 	expectedWest := 1@2.
 	
 	neighbors := (2@2) fourNeighbors.
 	
 	self assert: (neighbors at: 1) equals: expectedEast.
-	self assert: (neighbors at: 2) equals: expectedNorth.
+	self assert: (neighbors at: 2) equals: expectedSouth.
 	self assert: (neighbors at: 3) equals: expectedWest.
-	self assert: (neighbors at: 4) equals: expectedSouth 
+	self assert: (neighbors at: 4) equals: expectedNorth
 ]
