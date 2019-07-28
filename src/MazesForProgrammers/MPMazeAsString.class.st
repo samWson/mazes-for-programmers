@@ -43,7 +43,6 @@ Class {
 		'bottomHalfStream'
 	],
 	#classVars : [
-		'CellBody',
 		'CellCorner',
 		'HorizontalCellBoundary',
 		'LinkedHorizontalCellBoundary',
@@ -53,12 +52,6 @@ Class {
 	],
 	#category : #MazesForProgrammers
 }
-
-{ #category : #constants }
-MPMazeAsString class >> cellBody [
-
-	^ CellBody
-]
 
 { #category : #constants }
 MPMazeAsString class >> cellCorner [
@@ -75,7 +68,6 @@ MPMazeAsString class >> horizontalCellBoundary [
 { #category : #'class initialization' }
 MPMazeAsString class >> initialize [
 
-	CellBody := Character space asString repeat: 3.
 	CellCorner := '+'.
 	HorizontalCellBoundary := '---+'. 
 	LinkedVerticalCellBoundary := Character space asString.
@@ -118,6 +110,14 @@ MPMazeAsString class >> unlinkedHorizontalCellBoundary [
 MPMazeAsString class >> unlinkedVerticalCellBoundary [
 
 	^ UnlinkedVerticalCellBoundary
+]
+
+{ #category : #'streaming - helpers' }
+MPMazeAsString >> bodyOf: aCell [
+	
+	| body |
+	body := (grid contentsOf: aCell) padLeftTo: 3 with: Character space.
+	^ '{1}' format: { body. }
 ]
 
 { #category : #building }
@@ -222,7 +222,7 @@ MPMazeAsString >> streamUpperHalfOf: aCell [
 			].
 
 	topHalfStream
-		<< self class cellBody;
+		<< (self bodyOf: aCell);
 		<< eastCellBoundry
 ]
 

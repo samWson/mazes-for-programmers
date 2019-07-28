@@ -88,6 +88,9 @@ streamed. Building of the string is delegated to instances of `MPMazeAsString`.
 grid displayStringOn: Transcript. ""Or any other stream object.""
 ```
 
+The method `#contentsOf:` returns the visual contents of a cell in the grid and is part of the
+ASCII art style display. It can be overriden by subclasses to change what is displayed.
+
 ### Contents
 
 The method `#eachRow` will return a collection where each element is one row of the grid.
@@ -153,6 +156,12 @@ MPGrid >> atEastBoundary: aPoint [
 MPGrid >> atSouthBoundary: aPoint [ 
 
 	^ (aPoint y) = (extent y)
+]
+
+{ #category : #displaying }
+MPGrid >> contentsOf: aCell [
+
+	^ Character space asString
 ]
 
 { #category : #displaying }

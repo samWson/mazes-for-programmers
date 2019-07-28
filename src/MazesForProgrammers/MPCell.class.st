@@ -69,6 +69,31 @@ MPCell >> column [
 	^ column
 ]
 
+{ #category : #distances }
+MPCell >> distances [
+
+	| distances frontier |
+	distances := MPDistances newFrom: self.
+	frontier := { self. }.
+	
+	[ frontier isNotEmpty ] whileTrue: [ | newFrontier |
+		newFrontier := LinkedList new.
+		
+		frontier do: [ :cell | 
+			cell links do: [ :linked |
+				distances at: linked ifAbsentPut: [ 
+					newFrontier add: linked.
+					(distances at: cell) + 1.
+					].
+				 ].
+			 ].
+		
+		frontier := newFrontier.
+	 ].
+
+	^ distances 	
+]
+
 { #category : #accessing }
 MPCell >> east [
 	^ east
